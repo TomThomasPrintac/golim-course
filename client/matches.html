@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>משחקים · גולים</title>
+  <meta name="theme-color" content="#FF5A1F">
+  <link rel="icon" type="image/png" href="img/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Heebo:wght@700;800;900&family=Rubik:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/scoring.js" defer></script>
+  <script src="js/validation.js" defer></script>
+  <script src="js/api.js" defer></script>
+  <script src="js/ui.js" defer></script>
+  <script src="js/pages/matches.js" defer></script>
+</head>
+<body data-page="matches">
+  <a class="skip-link" href="#main">דלג לתוכן</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="matches.html" aria-label="גולים — לעמוד הבית">
+        <img src="img/logo.png" alt="" width="36" height="36">
+        <span class="brand-name">גולים</span>
+      </a>
+      <nav class="site-nav" aria-label="ניווט ראשי">
+        <ul>
+          <li><a href="matches.html" aria-current="page"><span class="nav-icon" aria-hidden="true">⚽</span><span>משחקים</span></a></li>
+          <li><a href="leagues.html"><span class="nav-icon" aria-hidden="true">👥</span><span>ליגות</span></a></li>
+          <li><a href="leaderboard.html"><span class="nav-icon" aria-hidden="true">🏆</span><span>טבלה</span></a></li>
+          <li><a href="profile.html"><span class="nav-icon" aria-hidden="true">👤</span><span>פרופיל</span></a></li>
+        </ul>
+      </nav>
+      <div class="user-slot"></div>
+    </div>
+  </header>
+
+  <main id="main" class="page">
+    <h1 class="page-title">משחקים</h1>
+
+    <!-- כרטיס "המשחק הבא" — נבנה ב-JS -->
+    <section id="next-match" class="card next-match" aria-labelledby="next-title" hidden></section>
+
+    <section class="matches-section" aria-labelledby="list-title">
+      <h2 id="list-title" class="visually-hidden">רשימת המשחקים</h2>
+
+      <div class="segmented" role="group" aria-label="סוג המשחקים">
+        <button type="button" data-tab="upcoming" aria-pressed="true">משחקים הבאים</button>
+        <button type="button" data-tab="results" aria-pressed="false">תוצאות</button>
+      </div>
+
+      <div class="filters">
+        <div id="day-chips" class="chips" role="group" aria-label="סינון לפי יום"></div>
+        <label class="check" id="only-unpredicted-wrap">
+          <input type="checkbox" id="only-unpredicted">
+          <span>רק משחקים שעוד לא ניחשתי</span>
+        </label>
+      </div>
+
+      <p id="list-summary" class="list-summary" aria-live="polite"></p>
+      <ul id="match-list" class="match-list">
+        <li class="loading-row">טוען משחקים…</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>גולים · פרויקט בקורס "בניית מערכות מבוססות WEB" · אוניברסיטת בן-גוריון בנגב, 2026</p>
+    <p class="footer-note">גרסת דמו: הנתונים נשמרים בדפדפן שלך בלבד</p>
+  </footer>
+</body>
+</html>

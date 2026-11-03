@@ -1,0 +1,660 @@
+/*
+ * components.css — רכיבים שחוזרים בכל האתר: כרטיסים, כפתורים, טפסים, שבבים, תגים והודעות.
+ */
+
+/* ---------- כרטיס ---------- */
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+/* ---------- כפתורים ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px; /* אזור לחיצה מינימלי לאצבע */
+  padding: 10px 20px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.08s, box-shadow 0.08s, background-color 0.15s;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* הכפתור הראשי "טקטילי": צל כתום כהה מתחתיו, שוקע 4px בלחיצה */
+.btn--primary {
+  background: var(--orange);
+  color: #fff;
+  box-shadow: 0 4px 0 var(--orange-deep);
+  margin-bottom: 4px;
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: #FF6B35;
+}
+
+.btn--primary:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 var(--orange-deep);
+}
+
+.btn--secondary {
+  background: var(--orange-soft);
+  color: var(--orange-deep);
+  border-color: color-mix(in srgb, var(--orange) 30%, transparent);
+}
+
+.btn--secondary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--orange) 18%, var(--card));
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--ink-2);
+  border-color: var(--border);
+}
+
+.btn--ghost:hover:not(:disabled) {
+  background: var(--sunken);
+}
+
+.btn--danger {
+  background: transparent;
+  color: var(--red);
+  border-color: color-mix(in srgb, var(--red) 40%, transparent);
+}
+
+.btn--danger:hover {
+  background: var(--red-soft);
+}
+
+.btn--google {
+  background: var(--card);
+  color: var(--ink);
+  border-color: var(--border);
+}
+
+.btn--google:hover:not(:disabled) {
+  background: var(--sunken);
+}
+
+.google-g {
+  font-family: Arial, sans-serif;
+  font-weight: 700;
+  color: #4285F4;
+}
+
+.btn--whatsapp {
+  background: #25D366;
+  color: #0B3D1F;
+}
+
+.btn--block {
+  width: 100%;
+}
+
+.btn--lg {
+  min-height: 54px;
+  font-size: 1.1rem;
+}
+
+.btn--sm {
+  min-height: 38px;
+  padding: 6px 14px;
+  font-size: 0.9rem;
+}
+
+.link-btn {
+  background: none;
+  border: 0;
+  padding: 6px 0;
+  color: var(--orange-deep);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.link-btn:disabled {
+  color: var(--muted);
+  text-decoration: none;
+  cursor: default;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 1.1rem;
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid currentColor;
+  border-inline-end-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- טפסים ---------- */
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="search"] {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+  font-size: 1rem; /* 16px ומעלה — מונע זום אוטומטי באייפון */
+  transition: border-color 0.15s;
+}
+
+input:focus-visible {
+  outline: none;
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--orange) 25%, transparent);
+}
+
+input[aria-invalid="true"] {
+  border-color: var(--red);
+  background: var(--red-soft);
+}
+
+input::placeholder {
+  color: var(--muted);
+  opacity: 0.8;
+}
+
+/* רווחים בתוך טפסים */
+form > label:not(:first-child) {
+  margin-top: 14px;
+}
+
+form > .btn,
+form > .form-actions {
+  margin-top: 14px;
+}
+
+form .field-error,
+form .hint {
+  margin-top: 6px;
+}
+
+.field-error {
+  color: var(--red);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.field-error:empty {
+  display: none;
+}
+
+.form-error {
+  color: var(--red);
+  font-weight: 600;
+  text-align: center;
+}
+
+.form-error:empty {
+  display: none;
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.hint--warn {
+  color: var(--amber);
+  font-weight: 500;
+}
+
+.input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.input-row input {
+  flex: 1;
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  margin: 0;
+}
+
+.check input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--orange);
+}
+
+/* מתג (switch) — checkbox רגיל עם עיצוב */
+.switch {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.switch input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.switch-track {
+  flex-shrink: 0;
+  position: relative;
+  width: 48px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--border);
+  transition: background-color 0.2s;
+}
+
+.switch-track::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  inset-inline-start: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  transition: inset-inline-start 0.2s;
+}
+
+.switch input:checked + .switch-track {
+  background: var(--orange);
+}
+
+.switch input:checked + .switch-track::after {
+  inset-inline-start: 23px;
+}
+
+.switch input:focus-visible + .switch-track {
+  outline: 3px solid var(--orange);
+  outline-offset: 2px;
+}
+
+.switch input:disabled ~ * {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---------- שבבים ולשוניות ---------- */
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chips--scroll {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+
+.chip {
+  flex-shrink: 0;
+  min-height: 38px;
+  padding: 6px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--ink-2);
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+.chip:hover {
+  border-color: var(--orange);
+}
+
+.chip[aria-pressed="true"] {
+  background: var(--orange-soft);
+  border-color: var(--orange);
+  color: var(--orange-deep);
+  font-weight: 700;
+}
+
+.segmented {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  padding: 4px;
+  background: var(--sunken);
+  border-radius: 999px;
+}
+
+.segmented button {
+  min-height: 40px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.segmented button[aria-pressed="true"] {
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: var(--shadow);
+}
+
+.segmented-sub {
+  font-weight: 400;
+  font-size: 0.85em;
+}
+
+/* ---------- תגים ---------- */
+
+.pill {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.pill--cta {
+  background: var(--orange);
+  color: #fff;
+}
+
+.pill--pending {
+  background: var(--orange-soft);
+  color: var(--amber);
+  border: 1px dashed currentColor;
+}
+
+/* תג נקודות: ירוק = מדויק, כתום = חלקי, אדום = החטאה */
+.badge {
+  display: inline-block;
+  min-width: 44px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.badge--exact {
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+.badge--diff,
+.badge--direction {
+  background: var(--amber-soft);
+  color: var(--amber);
+}
+
+.badge--miss {
+  background: var(--red-soft);
+  color: var(--red);
+}
+
+.live-tag {
+  color: var(--red);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.countdown-pill {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--sunken);
+  color: var(--ink-2);
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.countdown-pill:empty {
+  display: none;
+}
+
+.countdown-pill--urgent {
+  background: var(--orange-soft);
+  color: var(--orange-deep);
+}
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--orange-soft);
+  color: var(--orange-deep);
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+
+.avatar--lg {
+  width: 56px;
+  height: 56px;
+  font-size: 1.2rem;
+}
+
+/* דגל עגול. רקע אפור בזמן טעינה או כשאין חיבור */
+.flag {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--sunken);
+  box-shadow: 0 0 0 1px var(--border);
+}
+
+.flag--sm {
+  width: 22px;
+  height: 22px;
+}
+
+.flag--lg {
+  width: 52px;
+  height: 52px;
+}
+
+.score {
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- הודעות ---------- */
+
+.banner {
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  font-weight: 600;
+}
+
+.banner--warn {
+  background: var(--amber-soft);
+  color: var(--amber);
+  border: 1px solid color-mix(in srgb, var(--amber) 35%, transparent);
+  animation: pop-in 0.2s ease-out;
+}
+
+.banner--locked {
+  background: var(--sunken);
+  border: 1px solid var(--border);
+  display: grid;
+  gap: 6px;
+  font-weight: 500;
+}
+
+.banner-title {
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+.toast-region {
+  position: fixed;
+  inset-inline: 16px;
+  bottom: calc(var(--nav-height) + 16px + env(safe-area-inset-bottom));
+  z-index: 90;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.toast {
+  max-width: 420px;
+  padding: 12px 18px;
+  border-radius: 12px;
+  background: var(--ink);
+  color: var(--bg);
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  animation: pop-in 0.2s ease-out;
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.toast--success {
+  background: var(--green);
+  color: #fff;
+}
+
+.toast--warn {
+  background: var(--amber);
+  color: #fff;
+}
+
+.toast--error {
+  background: var(--red);
+  color: #fff;
+}
+
+.toast--leaving {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+.empty-state {
+  list-style: none;
+  text-align: center;
+  padding: 32px 16px;
+  color: var(--muted);
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+}
+
+.empty-emoji {
+  font-size: 2.5rem;
+}
+
+.loading-row {
+  list-style: none;
+  color: var(--muted);
+  padding: 16px 0;
+  text-align: center;
+}
+
+/* ---------- קונפטי ---------- */
+
+.confetti {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 100;
+}
+
+.confetti span {
+  position: absolute;
+  top: -12px;
+  width: 9px;
+  height: 14px;
+  border-radius: 2px;
+  animation: confetti-fall 1.9s cubic-bezier(0.2, 0.6, 0.4, 1) forwards;
+}
+
+@keyframes confetti-fall {
+  to {
+    transform: translate(var(--drift), 105vh) rotate(var(--spin));
+    opacity: 0.6;
+  }
+}
+
+@media (min-width: 900px) {
+  .toast-region {
+    bottom: 24px;
+  }
+}

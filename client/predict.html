@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ניחוש · גולים</title>
+  <meta name="theme-color" content="#FF5A1F">
+  <link rel="icon" type="image/png" href="img/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Heebo:wght@700;800;900&family=Rubik:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/scoring.js" defer></script>
+  <script src="js/validation.js" defer></script>
+  <script src="js/api.js" defer></script>
+  <script src="js/ui.js" defer></script>
+  <script src="js/pages/predict.js" defer></script>
+</head>
+<body data-page="predict">
+  <a class="skip-link" href="#main">דלג לתוכן</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="matches.html" aria-label="גולים — לעמוד הבית">
+        <img src="img/logo.png" alt="" width="36" height="36">
+        <span class="brand-name">גולים</span>
+      </a>
+      <nav class="site-nav" aria-label="ניווט ראשי">
+        <ul>
+          <li><a href="matches.html" aria-current="true"><span class="nav-icon" aria-hidden="true">⚽</span><span>משחקים</span></a></li>
+          <li><a href="leagues.html"><span class="nav-icon" aria-hidden="true">👥</span><span>ליגות</span></a></li>
+          <li><a href="leaderboard.html"><span class="nav-icon" aria-hidden="true">🏆</span><span>טבלה</span></a></li>
+          <li><a href="profile.html"><span class="nav-icon" aria-hidden="true">👤</span><span>פרופיל</span></a></li>
+        </ul>
+      </nav>
+      <div class="user-slot"></div>
+    </div>
+  </header>
+
+  <main id="main" class="page page--narrow">
+    <div class="predict-top">
+      <a href="matches.html" class="icon-btn" aria-label="סגור וחזור למשחקים">✕</a>
+      <h1 class="page-title">הניחוש שלך</h1>
+      <span id="lock-countdown" class="countdown-pill"></span>
+    </div>
+
+    <p id="load-message" class="loading-row" role="status">טוען את המשחק…</p>
+
+    <div id="predict-content" hidden>
+      <!-- פרטי המשחק: דגלים, שמות, שלב ושעה -->
+      <section id="match-hero" class="card match-hero" aria-label="פרטי המשחק"></section>
+
+      <div id="unsaved-banner" class="banner banner--warn" role="status" hidden>
+        <span aria-hidden="true">⚠️</span> הניחוש עדיין לא נשמר!
+      </div>
+      <div id="locked-banner" class="banner banner--locked" tabindex="-1" hidden></div>
+
+      <!-- הטופס של השירות המרכזי: ניחוש תוצאה -->
+      <form id="prediction-form" class="card predict-form" novalidate>
+        <fieldset class="score-fieldset">
+          <legend class="visually-hidden">התוצאה שאתה מנחש</legend>
+          <div class="score-pickers">
+            <div class="picker">
+              <label for="home-goals" class="picker-team" id="home-label"></label>
+              <div class="stepper">
+                <button type="button" class="step-btn" data-side="home" data-step="1">+</button>
+                <input id="home-goals" name="home" type="text" inputmode="numeric" autocomplete="off"
+                       maxlength="2" dir="ltr" class="goals-input" aria-describedby="home-goals-error">
+                <button type="button" class="step-btn" data-side="home" data-step="-1">−</button>
+              </div>
+              <p class="field-error" id="home-goals-error" aria-live="polite"></p>
+            </div>
+
+            <span class="score-sep" aria-hidden="true">:</span>
+
+            <div class="picker">
+              <label for="away-goals" class="picker-team" id="away-label"></label>
+              <div class="stepper">
+                <button type="button" class="step-btn" data-side="away" data-step="1">+</button>
+                <input id="away-goals" name="away" type="text" inputmode="numeric" autocomplete="off"
+                       maxlength="2" dir="ltr" class="goals-input" aria-describedby="away-goals-error">
+                <button type="button" class="step-btn" data-side="away" data-step="-1">−</button>
+              </div>
+              <p class="field-error" id="away-goals-error" aria-live="polite"></p>
+            </div>
+          </div>
+        </fieldset>
+
+        <div id="double-row" class="double-row">
+          <label class="switch">
+            <input type="checkbox" id="double" name="double" role="switch" aria-describedby="double-hint">
+            <span class="switch-track" aria-hidden="true"></span>
+            <span class="switch-label"><bdi dir="ltr">★ ×2</bdi> על המשחק הזה</span>
+          </label>
+          <p id="double-hint" class="hint">מכפיל את הניקוד. פעם אחת בכל מחזור.</p>
+        </div>
+
+        <p id="form-error" class="form-error" role="alert"></p>
+
+        <div id="save-row" class="save-row">
+          <button type="submit" id="save-btn" class="btn btn--primary btn--block btn--lg">שמור ניחוש</button>
+        </div>
+
+        <div id="save-success" class="success-msg" role="status" hidden>
+          <p class="success-title">✅ הניחוש נשמר</p>
+          <p id="success-next" class="success-next"></p>
+          <button type="button" id="stay-btn" class="link-btn">הישאר כאן</button>
+        </div>
+      </form>
+
+      <section class="card" aria-labelledby="dist-title">
+        <h2 id="dist-title" class="card-title">מה הליגה מנחשת</h2>
+        <div id="distribution"></div>
+      </section>
+
+      <section class="card" aria-labelledby="rules-title">
+        <h2 id="rules-title" class="card-title">כך מנקדים</h2>
+        <div id="rules"></div>
+      </section>
+
+      <a id="next-link" class="next-link" href="#" hidden></a>
+    </div>
+
+    <section id="not-found" class="card empty-state" hidden>
+      <p class="empty-emoji" aria-hidden="true">🤷</p>
+      <h2>המשחק לא נמצא</h2>
+      <p>ייתכן שהקישור שגוי או שהמשחק הוסר.</p>
+      <a class="btn btn--primary" href="matches.html">לכל המשחקים</a>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>גולים · פרויקט בקורס "בניית מערכות מבוססות WEB" · אוניברסיטת בן-גוריון בנגב, 2026</p>
+    <p class="footer-note">גרסת דמו: הנתונים נשמרים בדפדפן שלך בלבד</p>
+  </footer>
+</body>
+</html>
