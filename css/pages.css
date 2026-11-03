@@ -1,0 +1,940 @@
+/*
+ * pages.css — עיצוב שייחודי לעמוד אחד. מחולק לפי עמודים.
+ */
+
+/* ================= כניסה ================= */
+
+.login-hero {
+  text-align: center;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding-top: 8px;
+}
+
+.login-logo {
+  border-radius: 28px;
+  animation: pop-in 0.4s ease-out;
+}
+
+.login-title {
+  font-size: 2.6rem;
+  font-weight: 900;
+}
+
+.login-title-en {
+  display: block;
+  font-family: var(--font-brand);
+  font-size: 1rem;
+  letter-spacing: 0.2em;
+  color: var(--orange);
+}
+
+.login-tagline {
+  color: var(--ink-2);
+  font-size: 1.05rem;
+}
+
+.auth-step h2 {
+  font-size: 1.3rem;
+  margin-bottom: 12px;
+}
+
+.auth-step > p {
+  margin-bottom: 12px;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.demo-note {
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--orange-soft);
+  font-size: 0.9rem;
+}
+
+.demo-note strong {
+  font-family: var(--font-head);
+  font-size: 1.15rem;
+  letter-spacing: 0.15em;
+}
+
+.code-input {
+  text-align: center;
+  font-size: 1.5rem !important;
+  letter-spacing: 0.4em;
+  font-variant-numeric: tabular-nums;
+}
+
+.auth-links {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.fine-print {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* ================= משחקים ================= */
+
+.next-match {
+  background: linear-gradient(160deg, var(--orange-soft), var(--card) 70%);
+  display: grid;
+  gap: 14px;
+}
+
+.nm-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.nm-head .card-title {
+  margin: 0;
+}
+
+.nm-teams {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  text-align: center;
+}
+
+.nm-team {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  font-weight: 700;
+}
+
+.nm-time {
+  font-family: var(--font-head);
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+
+.matches-section {
+  display: grid;
+  gap: 12px;
+}
+
+.filters {
+  display: grid;
+  gap: 10px;
+}
+
+.list-summary {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.match-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+@media (min-width: 900px) {
+  .match-list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.match-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--ink);
+  text-decoration: none;
+  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+
+.match-card:hover {
+  border-color: var(--orange);
+  box-shadow: var(--shadow);
+  transform: translateY(-1px);
+}
+
+.match-card--live {
+  border-inline-start: 4px solid var(--red);
+}
+
+.mc-teams {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.mc-team {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mc-name {
+  flex: 1;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mc-goals {
+  font-family: var(--font-head);
+  font-weight: 900;
+  font-size: 1.15rem;
+  min-width: 1.2em;
+  text-align: center;
+}
+
+.match-card--live .mc-goals {
+  color: var(--red);
+}
+
+.mc-side {
+  display: grid;
+  justify-items: end;
+  gap: 6px;
+  text-align: end;
+  font-size: 0.9rem;
+}
+
+.mc-time {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.mc-guess {
+  color: var(--ink-2);
+}
+
+.mc-guess--saved {
+  color: var(--green);
+  font-weight: 600;
+}
+
+/* ================= ניחוש ================= */
+
+.predict-top {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.predict-top .page-title {
+  font-size: 1.35rem;
+}
+
+#predict-content {
+  display: grid;
+  gap: 16px;
+}
+
+.match-hero {
+  text-align: center;
+  display: grid;
+  gap: 10px;
+}
+
+.hero-teams {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+}
+
+.hero-team {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  font-size: 1.15rem;
+}
+
+.hero-vs {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.hero-meta {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.predict-form {
+  display: grid;
+  gap: 14px;
+}
+
+.score-fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.score-pickers {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: start;
+  gap: 8px;
+}
+
+.picker {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.picker-team {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.step-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: var(--card);
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1;
+  transition: background-color 0.15s, transform 0.08s;
+}
+
+.step-btn:hover:not(:disabled) {
+  background: var(--orange-soft);
+  border-color: var(--orange);
+}
+
+.step-btn:active:not(:disabled) {
+  transform: scale(0.92);
+}
+
+.step-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.goals-input {
+  width: 64px !important;
+  min-height: 64px !important;
+  padding: 0 !important;
+  text-align: center;
+  font-family: var(--font-head);
+  font-size: 2.2rem !important;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.goals-input:disabled {
+  background: var(--sunken);
+  color: var(--ink-2);
+}
+
+.score-sep {
+  align-self: center;
+  margin-top: 30px;
+  font-family: var(--font-head);
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--muted);
+}
+
+/* מסך צר: + מעל המספר ו-− מתחתיו, כדי ששני הבוררים ייכנסו זה לצד זה */
+@media (max-width: 480px) {
+  .stepper {
+    flex-direction: column;
+  }
+
+  .score-sep {
+    margin-top: 0;
+    padding-top: 28px;
+  }
+}
+
+.double-row {
+  padding-top: 12px;
+  border-top: 1px dashed var(--border);
+  display: grid;
+  gap: 6px;
+}
+
+/* הכפתור הראשי נדבק לתחתית המסך בזמן גלילה (מעל סרגל הניווט) */
+.save-row {
+  position: sticky;
+  bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 8px);
+  z-index: 5;
+}
+
+.success-msg {
+  text-align: center;
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  background: var(--green-soft);
+  animation: pop-in 0.25s ease-out;
+}
+
+.success-title {
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: var(--green);
+}
+
+.success-next {
+  color: var(--ink-2);
+}
+
+.dist-headline {
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.dist-bar {
+  display: flex;
+  height: 12px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--sunken);
+}
+
+.dist-seg {
+  transition: width 0.4s ease-out;
+}
+
+.dist-seg--home,
+.dist-key--home::before {
+  background: var(--orange);
+}
+
+.dist-seg--draw,
+.dist-key--draw::before {
+  background: var(--silver);
+}
+
+.dist-seg--away,
+.dist-key--away::before {
+  background: var(--ink-2);
+}
+
+.dist-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: var(--ink-2);
+}
+
+.dist-key::before {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-inline-end: 6px;
+}
+
+.rule-tiles {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.rule-tile {
+  display: grid;
+  justify-items: center;
+  padding: 10px 4px;
+  border-radius: var(--radius-sm);
+  background: var(--sunken);
+}
+
+.rule-tile:first-child {
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+.rule-points {
+  font-family: var(--font-head);
+  font-weight: 900;
+  font-size: 1.5rem;
+}
+
+.rule-label {
+  font-size: 0.85rem;
+}
+
+.next-link {
+  align-self: center;
+  font-weight: 600;
+  padding: 8px;
+}
+
+/* ================= ליגות ================= */
+
+.leagues-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.invite-panel {
+  display: grid;
+  gap: 10px;
+  text-align: center;
+  animation: pop-in 0.25s ease-out;
+}
+
+.invite-title {
+  font-size: 1.1rem;
+}
+
+.invite-code {
+  font-family: var(--font-head);
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  padding: 10px;
+  border: 2px dashed var(--orange);
+  border-radius: var(--radius-sm);
+  background: var(--orange-soft);
+  color: var(--orange-deep);
+}
+
+.invite-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+}
+
+.league-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.league-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--ink);
+  text-decoration: none;
+  transition: border-color 0.15s;
+}
+
+.league-card:hover {
+  border-color: var(--orange);
+}
+
+.league-card--new {
+  animation: highlight 1.8s ease-out;
+}
+
+@keyframes highlight {
+  from {
+    background: var(--orange-soft);
+    border-color: var(--orange);
+  }
+}
+
+.league-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--ink);
+  color: var(--bg);
+  font-family: var(--font-head);
+  font-weight: 800;
+}
+
+.league-info {
+  flex: 1;
+  display: grid;
+}
+
+.chevron {
+  color: var(--muted);
+  font-size: 1.5rem;
+}
+
+@media (min-width: 720px) {
+  .leagues-grid {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+/* ================= טבלה ================= */
+
+.podium {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: end;
+  gap: 8px;
+  padding-top: 8px;
+}
+
+.podium-place {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  text-align: center;
+  min-width: 0;
+}
+
+.podium-name {
+  font-size: 0.9rem;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.podium-points {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* המדרגה: הראשון הכי גבוה */
+.podium-step {
+  width: 100%;
+  display: grid;
+  place-items: center;
+  border-radius: 12px 12px 0 0;
+  font-family: var(--font-head);
+  font-weight: 900;
+  font-size: 1.6rem;
+  color: #0F1B2D; /* טקסט כהה קבוע — לבן על זהב/כסף לא קריא */
+}
+
+.podium-place--gold .podium-step {
+  height: 96px;
+  background: var(--gold);
+}
+
+.podium-place--silver .podium-step {
+  height: 72px;
+  background: var(--silver);
+}
+
+.podium-place--bronze .podium-step {
+  height: 56px;
+  background: var(--bronze);
+}
+
+.podium-place--gold .avatar {
+  box-shadow: 0 0 0 3px var(--gold);
+}
+
+.table-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.table-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 16px 8px;
+}
+
+.table-head .card-title {
+  margin: 0;
+}
+
+.search-input {
+  max-width: 220px;
+  min-height: 40px !important;
+}
+
+.rank-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.rank-table th {
+  padding: 8px 12px;
+  text-align: start;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+
+.rank-table abbr {
+  text-decoration: none;
+}
+
+.rank-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.rank-table tr.is-me td {
+  background: var(--orange-soft);
+  font-weight: 700;
+}
+
+.rank-cell {
+  width: 3em;
+  font-family: var(--font-head);
+  font-weight: 800;
+  color: var(--ink-2);
+}
+
+.name-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.me-tag {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--orange);
+  color: #fff;
+  font-size: 0.75rem;
+}
+
+.points-cell {
+  font-family: var(--font-head);
+  font-weight: 900;
+}
+
+.empty-cell {
+  text-align: center;
+  color: var(--muted);
+  padding: 24px !important;
+}
+
+.table-note {
+  padding: 10px 16px 14px;
+}
+
+.skeleton-row td span {
+  display: block;
+  height: 18px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--sunken), var(--border), var(--sunken));
+  background-size: 200% 100%;
+  animation: shimmer 1.2s linear infinite;
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.me-bar {
+  position: sticky;
+  bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 8px);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  background: var(--ink);
+  color: var(--bg);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.me-bar strong {
+  margin-inline-start: auto;
+  font-family: var(--font-head);
+}
+
+.me-rank {
+  font-family: var(--font-head);
+  font-weight: 900;
+  font-size: 1.3rem;
+  color: var(--orange);
+}
+
+@media (min-width: 900px) {
+  .save-row,
+  .me-bar {
+    bottom: 16px;
+  }
+}
+
+/* ================= פרופיל ================= */
+
+.profile-identity {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.profile-identity > div {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-name {
+  font-size: 1.4rem;
+  font-weight: 900;
+}
+
+.profile-identity .muted {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: end;
+}
+
+.name-form {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin: 0;
+}
+
+.stat {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  display: flex;
+  flex-direction: column-reverse; /* המספר הגדול מעל התווית, בלי לשנות את סדר dt/dd */
+  gap: 2px;
+}
+
+.stat dt {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.stat dd {
+  margin: 0;
+  font-family: var(--font-head);
+  font-size: 1.8rem;
+  font-weight: 900;
+}
+
+@media (min-width: 720px) {
+  .stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.history-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.history-item:last-child {
+  border-bottom: 0;
+}
+
+.history-link {
+  text-decoration: none;
+}
+
+.settings-list {
+  display: grid;
+  gap: 14px;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.rules-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+.rules-table th,
+.rules-table td {
+  padding: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.rules-table thead th {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.rules-table tbody th {
+  text-align: start;
+  font-weight: 500;
+}
+
+.demo-tools {
+  border-style: dashed;
+  box-shadow: none;
+}
+
+.demo-result {
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+.demo-result:empty {
+  display: none;
+}

@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ליגות · גולים</title>
+  <meta name="theme-color" content="#FF5A1F">
+  <link rel="icon" type="image/png" href="img/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Heebo:wght@700;800;900&family=Rubik:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/scoring.js" defer></script>
+  <script src="js/validation.js" defer></script>
+  <script src="js/api.js" defer></script>
+  <script src="js/ui.js" defer></script>
+  <script src="js/pages/leagues.js" defer></script>
+</head>
+<body data-page="leagues">
+  <a class="skip-link" href="#main">דלג לתוכן</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="matches.html" aria-label="גולים — לעמוד הבית">
+        <img src="img/logo.png" alt="" width="36" height="36">
+        <span class="brand-name">גולים</span>
+      </a>
+      <nav class="site-nav" aria-label="ניווט ראשי">
+        <ul>
+          <li><a href="matches.html"><span class="nav-icon" aria-hidden="true">⚽</span><span>משחקים</span></a></li>
+          <li><a href="leagues.html" aria-current="page"><span class="nav-icon" aria-hidden="true">👥</span><span>ליגות</span></a></li>
+          <li><a href="leaderboard.html"><span class="nav-icon" aria-hidden="true">🏆</span><span>טבלה</span></a></li>
+          <li><a href="profile.html"><span class="nav-icon" aria-hidden="true">👤</span><span>פרופיל</span></a></li>
+        </ul>
+      </nav>
+      <div class="user-slot"></div>
+    </div>
+  </header>
+
+  <main id="main" class="page page--narrow">
+    <h1 class="page-title">ליגות</h1>
+
+    <div class="leagues-grid">
+      <!-- פתיחת ליגה חדשה -->
+      <section class="card" aria-labelledby="create-title">
+        <h2 id="create-title" class="card-title"><span aria-hidden="true">＋</span> פתח ליגה חדשה</h2>
+        <form id="create-form" novalidate>
+          <p class="muted">30 שניות, ומקבלים קוד הזמנה לחברים.</p>
+          <label for="league-name">שם הליגה</label>
+          <input id="league-name" name="leagueName" type="text" maxlength="30" autocomplete="off"
+                 placeholder="לדוגמה: ליגת החברים" aria-describedby="league-name-error league-name-count">
+          <p class="hint" id="league-name-count">0/30 תווים</p>
+          <p class="field-error" id="league-name-error" aria-live="polite"></p>
+          <button type="submit" class="btn btn--primary btn--block">צור ליגה</button>
+        </form>
+
+        <div id="invite-panel" class="invite-panel" hidden>
+          <p class="invite-title">🎉 הליגה <strong id="invite-league-name"></strong> נפתחה!</p>
+          <p class="muted">שלחו לחברים את הקוד או את הקישור:</p>
+          <p class="invite-code" id="invite-code-text" dir="ltr"></p>
+          <div class="invite-actions">
+            <a id="whatsapp-link" class="btn btn--whatsapp" href="#" target="_blank" rel="noopener">שתף בווטסאפ</a>
+            <button type="button" id="copy-link-btn" class="btn btn--secondary">העתק קישור</button>
+          </div>
+          <button type="button" id="create-another-btn" class="link-btn">פתח ליגה נוספת</button>
+        </div>
+      </section>
+
+      <!-- הצטרפות לליגה קיימת -->
+      <section class="card" aria-labelledby="join-title">
+        <h2 id="join-title" class="card-title">הצטרף לליגה של חברים</h2>
+        <form id="join-form" novalidate>
+          <label for="invite-code">קוד או קישור הזמנה</label>
+          <div class="input-row">
+            <input id="invite-code" name="inviteCode" type="text" dir="ltr" autocomplete="off"
+                   placeholder="K7P2QX" aria-describedby="invite-code-error invite-code-hint">
+            <button type="submit" class="btn btn--secondary">הצטרף</button>
+          </div>
+          <p class="field-error" id="invite-code-error" aria-live="polite"></p>
+          <p class="hint" id="invite-code-hint">
+            לניסיון בדמו: <code>BGUWEB</code> או <code>M4RK8T</code>
+          </p>
+        </form>
+      </section>
+    </div>
+
+    <section class="my-leagues" aria-labelledby="my-title">
+      <h2 id="my-title" class="section-title">הליגות שלי</h2>
+      <ul id="league-list" class="league-list">
+        <li class="loading-row">טוען ליגות…</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>גולים · פרויקט בקורס "בניית מערכות מבוססות WEB" · אוניברסיטת בן-גוריון בנגב, 2026</p>
+    <p class="footer-note">גרסת דמו: הנתונים נשמרים בדפדפן שלך בלבד</p>
+  </footer>
+</body>
+</html>

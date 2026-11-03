@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>כניסה · גולים</title>
+  <meta name="description" content="גולים — ניחוש תוצאות משחקי כדורגל בליגות פרטיות עם חברים">
+  <meta name="theme-color" content="#FF5A1F">
+  <link rel="icon" type="image/png" href="img/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Heebo:wght@700;800;900&family=Rubik:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <script src="js/data.js" defer></script>
+  <script src="js/scoring.js" defer></script>
+  <script src="js/validation.js" defer></script>
+  <script src="js/api.js" defer></script>
+  <script src="js/ui.js" defer></script>
+  <script src="js/pages/login.js" defer></script>
+</head>
+<body data-page="login">
+  <a class="skip-link" href="#main">דלג לתוכן</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="גולים — עמוד הכניסה">
+        <img src="img/logo.png" alt="" width="36" height="36">
+        <span class="brand-name">גולים</span>
+      </a>
+    </div>
+  </header>
+
+  <main id="main" class="page page--narrow">
+    <section class="login-hero" aria-labelledby="app-title">
+      <img class="login-logo" src="img/logo.png" alt="" width="104" height="104">
+      <h1 id="app-title" class="login-title">גולים <span class="login-title-en" lang="en">GOLIM</span></h1>
+      <p class="login-tagline">טורניר הקיץ הכי כיף עם החברים</p>
+    </section>
+
+    <!-- שלב 1: בחירת שיטת כניסה והזנת אימייל -->
+    <section id="step-email" class="card auth-step" aria-labelledby="email-title">
+      <h2 id="email-title">כניסה לגולים</h2>
+      <button type="button" class="btn btn--google btn--block" id="google-btn">
+        <span class="google-g" aria-hidden="true">G</span> המשך עם Google
+      </button>
+      <p class="divider"><span>או עם קוד לאימייל</span></p>
+      <form id="email-form" novalidate>
+        <label for="email">כתובת אימייל</label>
+        <input id="email" name="email" type="email" inputmode="email" autocomplete="email" dir="ltr"
+               placeholder="name@example.com" aria-describedby="email-error">
+        <p class="field-error" id="email-error" aria-live="polite"></p>
+        <button type="button" class="link-btn" id="email-suggestion" hidden></button>
+        <button type="submit" class="btn btn--primary btn--block">שלח לי קוד</button>
+      </form>
+    </section>
+
+    <!-- שלב 2: הזנת הקוד שנשלח -->
+    <section id="step-code" class="card auth-step" aria-labelledby="code-title" hidden>
+      <h2 id="code-title">הזן את הקוד</h2>
+      <p>שלחנו קוד בן 6 ספרות אל <bdi id="code-email" class="ltr-text"></bdi></p>
+      <p class="demo-note">
+        <span aria-hidden="true">📨</span>
+        בגרסת הדמו אין שליחת מייל, אז הקוד מוצג כאן: <strong id="demo-code" class="ltr-text"></strong>
+      </p>
+      <form id="code-form" novalidate>
+        <label for="code">קוד אימות</label>
+        <input id="code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code"
+               maxlength="6" dir="ltr" class="code-input" aria-describedby="code-error">
+        <p class="field-error" id="code-error" aria-live="polite"></p>
+        <button type="submit" class="btn btn--primary btn--block">כניסה</button>
+      </form>
+      <div class="auth-links">
+        <button type="button" class="link-btn" id="resend-btn">שלח קוד חדש</button>
+        <button type="button" class="link-btn" id="change-email-btn">החלף כתובת אימייל</button>
+      </div>
+    </section>
+
+    <!-- שלב 3: השלמת שם (רק בכניסה הראשונה) -->
+    <section id="step-name" class="card auth-step" aria-labelledby="name-title" hidden>
+      <h2 id="name-title">איך לקרוא לך?</h2>
+      <p>השם יופיע בטבלאות ובליגות, כדי שהחברים יזהו אותך.</p>
+      <form id="name-form" novalidate>
+        <label for="display-name">שם תצוגה</label>
+        <input id="display-name" name="displayName" type="text" autocomplete="nickname" maxlength="20"
+               placeholder="לדוגמה: תום פ." aria-describedby="display-name-error display-name-count">
+        <p class="hint" id="display-name-count">0/20 תווים</p>
+        <p class="field-error" id="display-name-error" aria-live="polite"></p>
+        <button type="submit" class="btn btn--primary btn--block">יאללה, מתחילים</button>
+      </form>
+    </section>
+
+    <p class="fine-print"><bdi dir="ltr">16+</bdi> · חינם · ללא הימורים</p>
+  </main>
+
+  <footer class="site-footer">
+    <p>גולים · פרויקט בקורס "בניית מערכות מבוססות WEB" · אוניברסיטת בן-גוריון בנגב, 2026</p>
+    <p class="footer-note">גרסת דמו: הנתונים נשמרים בדפדפן שלך בלבד</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,186 @@
+/*
+ * base.css — משתני העיצוב (צבעים, גופנים, רדיוסים), איפוס בסיסי וטיפוגרפיה.
+ * הצבעים והגופנים הם השפה העיצובית מסעיף 5 באפיון.
+ */
+
+:root {
+  /* מותג */
+  --orange: #FF5A1F;
+  --orange-deep: #C23F0F;
+  --orange-soft: #FFF3EA;
+
+  /* משטחים וטקסט */
+  --bg: #FFFBF6;
+  --card: #FFFFFF;
+  --sunken: #FAF1E6;
+  --ink: #0F1B2D;
+  --ink-2: #3D4856;
+  --muted: #5A6B7F;
+  --border: #EADDD1;
+
+  /* צבעים סמנטיים — רק לתוצאות: פגיעה / חלקי / החטאה */
+  --green: #16A34A;
+  --green-soft: #E8F7EE;
+  --amber: #B45309;
+  --amber-soft: #FEF3E2;
+  --red: #DC2626;
+  --red-soft: #FDECEC;
+  --blue: #2F80ED;
+
+  /* מדליות לפודיום */
+  --gold: #D9A82A;
+  --silver: #C0C7CF;
+  --bronze: #C28A52;
+
+  --font-head: 'Heebo', 'Rubik', Arial, sans-serif;
+  --font-body: 'Rubik', 'Heebo', Arial, sans-serif;
+  --font-brand: 'Fredoka', 'Rubik', Arial, sans-serif;
+
+  --radius: 14px;
+  --radius-sm: 10px;
+  --shadow: 0 1px 2px rgba(15, 27, 45, 0.05), 0 6px 18px rgba(15, 27, 45, 0.06);
+  --nav-height: 68px;
+  --content-width: 680px;
+  --wide-width: 1040px;
+
+  color-scheme: light;
+}
+
+/* מצב כהה לפי הגדרות המערכת */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --orange-soft: #33201A;
+    --bg: #0B1422;
+    --card: #14223A;
+    --sunken: #0F1B2D;
+    --ink: #F5EFE7;
+    --ink-2: #D2DAE4;
+    --muted: #9AABBE;
+    --border: #26364F;
+    --green: #34C46A;
+    --green-soft: #12301F;
+    --amber: #F0A43A;
+    --amber-soft: #3A2A12;
+    --red: #F26363;
+    --red-soft: #3A1A1D;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 6px 18px rgba(0, 0, 0, 0.25);
+    color-scheme: dark;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh; /* גובה אמיתי בנייד, כשסרגל הכתובת מתכווץ */
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: var(--font-head);
+  line-height: 1.2;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: var(--orange-deep);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+code {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  background: var(--sunken);
+  padding: 0.05em 0.35em;
+  border-radius: 6px;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* טבעת פוקוס גלויה לניווט במקלדת */
+:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* מוסתר מהעין אבל נקרא בקורא מסך */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  inset-inline-start: 1rem;
+  top: -100px;
+  z-index: 100;
+  background: var(--ink);
+  color: var(--bg);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.ltr-text {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

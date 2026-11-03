@@ -1,0 +1,216 @@
+/*
+ * layout.css — מבנה העמוד: כותרת עליונה, תפריט ניווט, תוכן ואזור תחתון.
+ * Mobile-first: בטלפון הניווט הוא סרגל תחתון בהישג אגודל,
+ * ומ-900px ומעלה הוא עובר לשורה בכותרת העליונה.
+ */
+
+/* ---------- כותרת עליונה ---------- */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.header-inner {
+  max-width: var(--wide-width);
+  margin: 0 auto;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.brand img {
+  border-radius: 10px; /* אייקון אפליקציה — הפינות הלבנות של הלוגו לא בולטות במצב כהה */
+}
+
+.brand-name {
+  font-family: var(--font-head);
+  font-weight: 900;
+  font-size: 1.4rem;
+}
+
+.user-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.user-chip-name {
+  display: none; /* בטלפון רק העיגול עם האותיות */
+}
+
+/* ---------- ניווט: סרגל תחתון בטלפון ---------- */
+
+.site-nav {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 50;
+  background: var(--card);
+  border-top: 1px solid var(--border);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.site-nav ul {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  max-width: 520px;
+  height: var(--nav-height);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.site-nav a {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.nav-icon {
+  font-size: 1.35rem;
+  line-height: 1;
+  filter: grayscale(1);
+  opacity: 0.7;
+}
+
+.site-nav a[aria-current] {
+  color: var(--orange-deep);
+  font-weight: 700;
+}
+
+.site-nav a[aria-current] .nav-icon {
+  filter: none;
+  opacity: 1;
+}
+
+/* מקום לסרגל התחתון, כדי שלא יסתיר את סוף העמוד */
+body:has(.site-nav) {
+  padding-bottom: calc(var(--nav-height) + env(safe-area-inset-bottom));
+}
+
+/* ---------- תוכן ---------- */
+
+.page {
+  flex: 1;
+  width: 100%;
+  max-width: var(--wide-width);
+  margin: 0 auto;
+  padding: 20px 16px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.page--narrow {
+  max-width: var(--content-width);
+}
+
+.page-title {
+  font-size: 1.75rem;
+  font-weight: 900;
+}
+
+.section-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+/* ---------- אזור תחתון ---------- */
+
+.site-footer {
+  padding: 20px 16px 24px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.8rem;
+  border-top: 1px solid var(--border);
+}
+
+.footer-note {
+  margin-top: 4px;
+  font-size: 0.75rem;
+}
+
+/* ---------- מחשב: הניווט עולה לכותרת ---------- */
+
+@media (min-width: 900px) {
+  .header-inner {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+  }
+
+  .site-nav {
+    position: static;
+    background: none;
+    border: 0;
+    padding: 0;
+  }
+
+  .site-nav ul {
+    height: auto;
+    display: flex;
+    gap: 4px;
+  }
+
+  .site-nav a {
+    flex-direction: row;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    color: var(--ink-2);
+    transition: background-color 0.15s;
+  }
+
+  .site-nav a:hover {
+    background: var(--sunken);
+  }
+
+  .site-nav a[aria-current] {
+    background: var(--orange-soft);
+  }
+
+  .nav-icon {
+    font-size: 1.05rem;
+  }
+
+  .user-slot {
+    justify-self: end;
+  }
+
+  .user-chip-name {
+    display: inline;
+  }
+
+  body:has(.site-nav) {
+    padding-bottom: 0;
+  }
+
+  .page {
+    padding-top: 32px;
+  }
+}
