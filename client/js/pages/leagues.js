@@ -50,7 +50,7 @@ function renderLeagues(newId = null) {
 // ---------- פתיחת ליגה ----------
 
 function updateNameCount() {
-  els.nameCount.textContent = `${els.nameInput.value.trim().length}/30 תווים`;
+  els.nameCount.textContent = `${els.nameInput.value.trim().length}/${LEAGUE_NAME_MAX} תווים`;
   UI.clearFieldError(els.nameInput);
 }
 
