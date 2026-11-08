@@ -14,6 +14,8 @@ function ltr(text) {
 }
 
 const MAX_GOALS = 15;
+const NAME_MAX = 30; // כמו באפיון: שם תצוגה 2–30 תווים
+const LEAGUE_NAME_MAX = 50; // כמו באפיון: שם ליגה עד 50 תווים
 const RESERVED_NAMES = ['שחקן', 'player', 'admin', 'גולים', 'golim'];
 
 // טעויות הקלדה נפוצות בדומיין של כתובת המייל
@@ -53,7 +55,7 @@ const Validation = {
     const value = raw.trim().replace(/\s+/g, ' ');
     if (value === '') return { valid: false, error: 'נא לבחור שם' };
     if (value.length < 2) return { valid: false, error: 'השם קצר מדי — לפחות 2 תווים' };
-    if (value.length > 20) return { valid: false, error: 'השם ארוך מדי — עד 20 תווים' };
+    if (value.length > NAME_MAX) return { valid: false, error: `השם ארוך מדי — עד ${NAME_MAX} תווים` };
     // אותיות בעברית או באנגלית, רווח, גרש, מקף ונקודה בלבד
     if (!/^[א-תa-zA-Z '׳״"\-.]+$/.test(value)) {
       return { valid: false, error: 'אפשר להשתמש רק באותיות, רווח, מקף וגרש' };
@@ -85,8 +87,7 @@ const Validation = {
   leagueName(raw, existingNames) {
     const value = raw.trim().replace(/\s+/g, ' ');
     if (value === '') return { valid: false, error: 'נא לתת שם לליגה' };
-    if (value.length < 3) return { valid: false, error: 'שם הליגה קצר מדי — לפחות 3 תווים' };
-    if (value.length > 30) return { valid: false, error: 'שם הליגה ארוך מדי — עד 30 תווים' };
+    if (value.length > LEAGUE_NAME_MAX) return { valid: false, error: `שם הליגה ארוך מדי — עד ${LEAGUE_NAME_MAX} תווים` };
     if (!/[א-תa-zA-Z]/.test(value)) return { valid: false, error: 'שם הליגה צריך לכלול לפחות אות אחת' };
     const taken = existingNames.some((name) => name.toLowerCase() === value.toLowerCase());
     if (taken) return { valid: false, error: 'כבר יש לך ליגה בשם הזה' };

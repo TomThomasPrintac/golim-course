@@ -156,7 +156,7 @@ function changeEmail() {
 // ---------- שלב 3: שם ----------
 
 function updateNameCount() {
-  nameCount.textContent = `${nameInput.value.trim().length}/20 תווים`;
+  nameCount.textContent = `${nameInput.value.trim().length}/${NAME_MAX} תווים`;
   UI.clearFieldError(nameInput);
 }
 
