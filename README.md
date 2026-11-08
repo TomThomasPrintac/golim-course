@@ -10,7 +10,7 @@
 | חלק | תיקייה | תוכן |
 |---|---|---|
 | א׳ — אפיון | [`docs/part-a/`](docs/part-a/) | מסמך האפיון (PDF) |
-| ב׳ — צד לקוח | [`client/`](client/) | האתר: HTML, CSS ו-JavaScript |
+| ב׳ — צד לקוח | [`client/`](client/) · [`docs/part-b/`](docs/part-b/) | האתר: HTML, CSS ו-JavaScript · דוח חלק ב׳ (PDF) |
 | ג׳ — צד שרת | `server/` | יתווסף בחלק ג׳ |
 
 ## הפעלה
