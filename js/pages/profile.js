@@ -1,5 +1,5 @@
 /*
- * profile.js — עמוד הפרופיל: עריכת שם, סטטיסטיקה, היסטוריית ניחושים, התראות וכלי בדיקה.
+ * profile.js — עמוד הפרופיל: עריכת שם, סטטיסטיקה, היסטוריית ניחושים, חוקי הניקוד וכלי בדיקה.
  */
 
 const els = {
@@ -12,7 +12,6 @@ const els = {
   cancelName: document.getElementById('cancel-name-btn'),
   stats: document.getElementById('stats'),
   history: document.getElementById('history'),
-  settingsForm: document.getElementById('settings-form'),
   rulesBody: document.getElementById('rules-body'),
   kickoffSoon: document.getElementById('kickoff-soon-btn'),
   reset: document.getElementById('reset-btn'),
@@ -120,28 +119,6 @@ function renderRules() {
     UI.el('td', {}, stage.doubleAllowed ? '✓' : '—'))));
 }
 
-// ---------- הגדרות התראות ----------
-
-async function loadSettings() {
-  const settings = await Api.getSettings();
-  for (const input of els.settingsForm.elements) {
-    input.checked = Boolean(settings[input.name]);
-    input.disabled = false;
-  }
-}
-
-/** כל שינוי במתג נשמר מיד. אם השמירה נכשלה — המתג חוזר למצב הקודם. */
-async function handleSettingChange(event) {
-  const input = event.target;
-  try {
-    await Api.saveSettings({ [input.name]: input.checked });
-    UI.toast('ההגדרה נשמרה', 'success');
-  } catch (error) {
-    input.checked = !input.checked;
-    UI.toast(UI.errorMessage(error), 'error');
-  }
-}
-
 // ---------- כלי בדיקה ----------
 
 function handleKickoffSoon() {
@@ -179,7 +156,6 @@ async function init() {
   els.cancelName.addEventListener('click', () => toggleNameForm(false));
   els.nameForm.addEventListener('submit', handleNameSubmit);
   els.nameInput.addEventListener('input', () => UI.clearFieldError(els.nameInput));
-  els.settingsForm.addEventListener('change', handleSettingChange);
   els.kickoffSoon.addEventListener('click', handleKickoffSoon);
   els.reset.addEventListener('click', handleReset);
   els.logout.addEventListener('click', handleLogout);
@@ -188,7 +164,6 @@ async function init() {
     const [matches, board] = await Promise.all([
       Api.getMatches(),
       Api.getLeaderboard('official', 'total'),
-      loadSettings(),
     ]);
     const me = board.rows.find((row) => row.isMe);
     const scored = matches

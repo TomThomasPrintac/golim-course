@@ -894,11 +894,6 @@
   text-decoration: none;
 }
 
-.settings-list {
-  display: grid;
-  gap: 14px;
-}
-
 .table-scroll {
   overflow-x: auto;
 }

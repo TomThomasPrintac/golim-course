@@ -32,7 +32,6 @@ const Api = (() => {
   const OTP_TTL_MS = 5 * 60 * 1000;
   const OTP_MAX_ATTEMPTS = 5;
   const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // בלי O/0 ו-I/1 שקל להתבלבל ביניהם
-  const DEFAULT_SETTINGS = { kickoffReminder: true, results: true, overtaken: false };
 
   // ---------- אחסון ----------
 
@@ -103,7 +102,6 @@ const Api = (() => {
       name: null,
       leagues: [...SEEDED_LEAGUE_IDS],
       predictions,
-      settings: { ...DEFAULT_SETTINGS },
       createdAt: Date.now(),
     };
   }
@@ -424,16 +422,6 @@ const Api = (() => {
           rows: leaderboardRows(leagueId, period),
           roundLabel: ROUNDS[currentRound(matches)],
         };
-      });
-    },
-
-    getSettings() {
-      return respond(() => ({ ...DEFAULT_SETTINGS, ...requireAccount().account.settings }));
-    },
-
-    saveSettings(settings) {
-      return respond(() => {
-        updateAccount((account) => { account.settings = { ...account.settings, ...settings }; });
       });
     },
 
