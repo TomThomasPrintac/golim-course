@@ -6,7 +6,7 @@
  */
 
 /**
- * עוטף טקסט באנגלית (אימייל, קוד) בתווי כיווניות LRI…PDI.
+ * עוטף טקסט באנגלית (למשל אימייל) בתווי כיווניות LRI…PDI.
  * בלי זה, בתוך משפט בעברית הדפדפן מסדר את הסימנים מסביב לא נכון (למשל ?tom@gmail.com).
  */
 function ltr(text) {
@@ -16,6 +16,8 @@ function ltr(text) {
 const MAX_GOALS = 15;
 const NAME_MAX = 30; // כמו באפיון: שם תצוגה 2–30 תווים
 const LEAGUE_NAME_MAX = 50; // כמו באפיון: שם ליגה עד 50 תווים
+const PASSWORD_MIN = 8;
+const PASSWORD_MAX = 64;
 const RESERVED_NAMES = ['שחקן', 'player', 'admin', 'גולים', 'golim'];
 
 // טעויות הקלדה נפוצות בדומיין של כתובת המייל
@@ -44,11 +46,36 @@ const Validation = {
     return { valid: true, value };
   },
 
-  otp(raw) {
-    const value = raw.replace(/\s/g, '');
-    if (value === '') return { valid: false, error: 'נא להזין את הקוד שקיבלת' };
-    if (!/^\d{6}$/.test(value)) return { valid: false, error: 'הקוד צריך להכיל בדיוק 6 ספרות' };
-    return { valid: true, value };
+  /**
+   * אילו מדרישות הסיסמה מתקיימות. משמש גם לבדיקה עצמה וגם לרשימה
+   * שמתעדכנת בזמן ההקלדה בטופס ההרשמה, כך שהחוקים כתובים במקום אחד.
+   */
+  passwordRules(raw) {
+    return {
+      length: raw.length >= PASSWORD_MIN,
+      letter: /[a-zA-Z]/.test(raw),
+      digit: /\d/.test(raw),
+    };
+  },
+
+  /** סיסמה חדשה (בהרשמה). לא מקצצים רווחים — הם חלק מהסיסמה, ולכן פשוט לא מאפשרים אותם. */
+  password(raw) {
+    if (raw === '') return { valid: false, error: 'נא לבחור סיסמה' };
+    if (/\s/.test(raw)) return { valid: false, error: 'בלי רווחים בסיסמה' };
+    if (raw.length > PASSWORD_MAX) return { valid: false, error: `הסיסמה ארוכה מדי — עד ${PASSWORD_MAX} תווים` };
+    const rules = Validation.passwordRules(raw);
+    if (!rules.length) return { valid: false, error: `הסיסמה קצרה מדי — לפחות ${PASSWORD_MIN} תווים` };
+    if (!rules.letter || !rules.digit) {
+      return { valid: false, error: 'הסיסמה צריכה לכלול לפחות אות אחת באנגלית וספרה אחת' };
+    }
+    return { valid: true, value: raw };
+  },
+
+  /** אימות סיסמה: אותה סיסמה בדיוק, כדי לתפוס טעות הקלדה. */
+  passwordConfirm(password, confirm) {
+    if (confirm === '') return { valid: false, error: 'נא להקליד את הסיסמה שוב' };
+    if (confirm !== password) return { valid: false, error: 'הסיסמאות לא זהות' };
+    return { valid: true, value: confirm };
   },
 
   displayName(raw) {

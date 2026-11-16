@@ -96,6 +96,15 @@ const DEMO_LEAGUES = [
   { id: 'bgu', name: 'סטודנטים ב-BGU', code: 'BGUWEB', members: ['u3', 'u6', 'u9', 'u12', 'u15'] },
 ];
 
+// חשבון לניסיון. האימייל והסיסמה (Golim2026) כתובים בעמוד הכניסה.
+// הוא נשמר כמו כל חשבון: hash של הסיסמה עם salt, ולא הסיסמה עצמה (ראו api.js).
+const DEMO_ACCOUNT = {
+  email: 'demo@golim.app',
+  name: 'אורח דמו',
+  salt: '09daef863fa5df3c1d56ae6176e1ca8f',
+  passwordHash: '547d1fc4aab882b3566d9de855626fcd201da5ab7fb99568f8df81c251cfd711',
+};
+
 // ליגות שחשבון חדש מצורף אליהן מראש, כדי שיהיה מה להציג בדמו
 const SEEDED_LEAGUE_IDS = ['army', 'family'];
 

@@ -40,55 +40,73 @@
       <p class="login-tagline">טורניר הקיץ הכי כיף עם החברים</p>
     </section>
 
-    <!-- שלב 1: בחירת שיטת כניסה והזנת אימייל -->
-    <section id="step-email" class="card auth-step" aria-labelledby="email-title">
-      <h2 id="email-title">כניסה לגולים</h2>
-      <button type="button" class="btn btn--google btn--block" id="google-btn">
-        <span class="google-g" aria-hidden="true">G</span> המשך עם Google
-      </button>
-      <p class="divider"><span>או עם קוד לאימייל</span></p>
-      <form id="email-form" novalidate>
-        <label for="email">כתובת אימייל</label>
-        <input id="email" name="email" type="email" inputmode="email" autocomplete="email" dir="ltr"
-               placeholder="name@example.com" aria-describedby="email-error">
-        <p class="field-error" id="email-error" aria-live="polite"></p>
-        <button type="button" class="link-btn" id="email-suggestion" hidden></button>
-        <button type="submit" class="btn btn--primary btn--block">שלח לי קוד</button>
-      </form>
-    </section>
-
-    <!-- שלב 2: הזנת הקוד שנשלח -->
-    <section id="step-code" class="card auth-step" aria-labelledby="code-title" hidden>
-      <h2 id="code-title">הזן את הקוד</h2>
-      <p>שלחנו קוד בן 6 ספרות אל <bdi id="code-email" class="ltr-text"></bdi></p>
-      <p class="demo-note">
-        <span aria-hidden="true">📨</span>
-        בגרסת הדמו אין שליחת מייל, אז הקוד מוצג כאן: <strong id="demo-code" class="ltr-text"></strong>
-      </p>
-      <form id="code-form" novalidate>
-        <label for="code">קוד אימות</label>
-        <input id="code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code"
-               maxlength="6" dir="ltr" class="code-input" aria-describedby="code-error">
-        <p class="field-error" id="code-error" aria-live="polite"></p>
-        <button type="submit" class="btn btn--primary btn--block">כניסה</button>
-      </form>
-      <div class="auth-links">
-        <button type="button" class="link-btn" id="resend-btn">שלח קוד חדש</button>
-        <button type="button" class="link-btn" id="change-email-btn">החלף כתובת אימייל</button>
+    <section class="card auth-card" aria-labelledby="auth-title">
+      <h2 id="auth-title" class="visually-hidden">כניסה או הרשמה</h2>
+      <div class="segmented" role="group" aria-label="כניסה או הרשמה">
+        <button type="button" data-mode="login" aria-pressed="true">כניסה</button>
+        <button type="button" data-mode="register" aria-pressed="false">הרשמה</button>
       </div>
-    </section>
 
-    <!-- שלב 3: השלמת שם (רק בכניסה הראשונה) -->
-    <section id="step-name" class="card auth-step" aria-labelledby="name-title" hidden>
-      <h2 id="name-title">איך לקרוא לך?</h2>
-      <p>השם יופיע בטבלאות ובליגות, כדי שהחברים יזהו אותך.</p>
-      <form id="name-form" novalidate>
-        <label for="display-name">שם תצוגה</label>
-        <input id="display-name" name="displayName" type="text" autocomplete="nickname" maxlength="30"
-               placeholder="לדוגמה: תום פ." aria-describedby="display-name-error display-name-count">
-        <p class="hint" id="display-name-count">0/30 תווים</p>
-        <p class="field-error" id="display-name-error" aria-live="polite"></p>
-        <button type="submit" class="btn btn--primary btn--block">יאללה, מתחילים</button>
+      <!-- כניסה לחשבון קיים -->
+      <form id="login-form" class="auth-form" novalidate>
+        <label for="login-email">אימייל</label>
+        <input id="login-email" name="email" type="email" inputmode="email" autocomplete="username" dir="ltr"
+               placeholder="name@example.com" aria-describedby="login-email-error">
+        <p class="field-error" id="login-email-error" aria-live="polite"></p>
+
+        <label for="login-password">סיסמה</label>
+        <div class="input-row">
+          <input id="login-password" name="password" type="password" autocomplete="current-password" dir="ltr"
+                 aria-describedby="login-password-error">
+          <button type="button" class="btn btn--ghost password-toggle" aria-controls="login-password"
+                  aria-pressed="false">הצג</button>
+        </div>
+        <p class="field-error" id="login-password-error" aria-live="polite"></p>
+
+        <p class="form-error" id="login-error" role="alert"></p>
+        <button type="submit" class="btn btn--primary btn--block">כניסה</button>
+        <p class="demo-note">
+          <span aria-hidden="true">🧪</span>
+          לניסיון: <bdi class="ltr-text">demo@golim.app</bdi> עם הסיסמה <bdi class="ltr-text">Golim2026</bdi>
+        </p>
+      </form>
+
+      <!-- הרשמה: חשבון חדש -->
+      <form id="register-form" class="auth-form" novalidate hidden>
+        <label for="reg-name">שם תצוגה</label>
+        <input id="reg-name" name="name" type="text" autocomplete="nickname" maxlength="30"
+               placeholder="לדוגמה: תום פ." aria-describedby="reg-name-count reg-name-error">
+        <p class="hint" id="reg-name-count">0/30 תווים · כך החברים יזהו אותך בטבלה</p>
+        <p class="field-error" id="reg-name-error" aria-live="polite"></p>
+
+        <label for="reg-email">אימייל</label>
+        <input id="reg-email" name="email" type="email" inputmode="email" autocomplete="email" dir="ltr"
+               placeholder="name@example.com" aria-describedby="reg-email-error">
+        <p class="field-error" id="reg-email-error" aria-live="polite"></p>
+        <button type="button" class="link-btn" id="reg-email-suggestion" hidden></button>
+
+        <label for="reg-password">סיסמה</label>
+        <div class="input-row">
+          <input id="reg-password" name="password" type="password" autocomplete="new-password" dir="ltr"
+                 maxlength="64" aria-describedby="reg-password-rules reg-password-error">
+          <button type="button" class="btn btn--ghost password-toggle" aria-controls="reg-password"
+                  aria-pressed="false">הצג</button>
+        </div>
+        <!-- מתעדכן בזמן ההקלדה: כל דרישה שמתקיימת מקבלת ✓ -->
+        <ul class="password-rules" id="reg-password-rules">
+          <li data-rule="length">8 תווים לפחות</li>
+          <li data-rule="letter">אות באנגלית</li>
+          <li data-rule="digit">ספרה</li>
+        </ul>
+        <p class="field-error" id="reg-password-error" aria-live="polite"></p>
+
+        <label for="reg-confirm">אימות סיסמה</label>
+        <input id="reg-confirm" name="confirm" type="password" autocomplete="new-password" dir="ltr"
+               maxlength="64" aria-describedby="reg-confirm-error">
+        <p class="field-error" id="reg-confirm-error" aria-live="polite"></p>
+
+        <p class="form-error" id="register-error" role="alert"></p>
+        <button type="submit" class="btn btn--primary btn--block">יצירת חשבון</button>
       </form>
     </section>
 
