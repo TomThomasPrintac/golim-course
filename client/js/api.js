@@ -5,7 +5,8 @@
  *   - הנתונים נשמרים ב-localStorage של הדפדפן במקום בבסיס נתונים.
  *   - כל פונקציה מחזירה Promise עם השהיה קצרה, כמו בקשת רשת אמיתית.
  *   - כשהדפדפן לא מחובר לרשת (navigator.onLine = false) הבקשה נכשלת, כמו בשרת אמיתי.
- *   - הכללים נבדקים כאן שוב (נעילה, טווח, ★×2), כי לא סומכים על הלקוח.
+ *   - הכללים נבדקים כאן שוב (נעילה, טווח, ★×2, חוקי הסיסמה), כי לא סומכים על הלקוח.
+ *   - סיסמאות לא נשמרות כמו שהן, אלא רק כ-hash עם salt.
  *
  * העמודים לא ניגשים ל-localStorage בעצמם — רק דרך Api.
  * כך בחלק ג׳ נחליף רק את הקובץ הזה בקריאות fetch לשרת, ושאר הקוד לא ישתנה.
@@ -23,14 +24,14 @@ const Api = (() => {
   const KEYS = {
     accounts: 'golim.accounts',
     session: 'golim.session',
-    otp: 'golim.otp',
+    loginAttempts: 'golim.loginAttempts',
     customLeagues: 'golim.customLeagues',
     kickoffOverrides: 'golim.kickoffOverrides',
   };
   const LATENCY_MS = 450;
   const HOUR_MS = 60 * 60 * 1000;
-  const OTP_TTL_MS = 5 * 60 * 1000;
-  const OTP_MAX_ATTEMPTS = 5;
+  const MAX_LOGIN_ATTEMPTS = 5; // ניסיונות כניסה שגויים לפני חסימה זמנית
+  const LOCKOUT_MS = 60 * 1000;
   const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // בלי O/0 ו-I/1 שקל להתבלבל ביניהם
 
   // ---------- אחסון ----------
@@ -67,8 +68,14 @@ const Api = (() => {
 
   // ---------- משתמשים ----------
 
+  /** כל החשבונות (אימייל → חשבון). חשבון הדמו נוצר בפעם הראשונה שניגשים אליהם. */
   function getAccounts() {
-    return read(KEYS.accounts, {});
+    const accounts = read(KEYS.accounts, {});
+    if (!accounts[DEMO_ACCOUNT.email]) {
+      accounts[DEMO_ACCOUNT.email] = createAccount(DEMO_ACCOUNT);
+      write(KEYS.accounts, accounts);
+    }
+    return accounts;
   }
 
   function sessionEmail() {
@@ -93,27 +100,42 @@ const Api = (() => {
   }
 
   /** חשבון חדש מקבל ניחושי עבר ושתי ליגות, כדי שיהיה מה להציג בדמו. */
-  function createAccount(email) {
+  function createAccount({ name, salt, passwordHash }) {
     const predictions = {};
     for (const [matchId, prediction] of Object.entries(SEEDED_PREDICTIONS)) {
       predictions[matchId] = { ...prediction, savedAt: Date.now() };
     }
     return {
-      name: null,
+      name,
+      salt,
+      passwordHash,
       leagues: [...SEEDED_LEAGUE_IDS],
       predictions,
       createdAt: Date.now(),
     };
   }
 
-  function signIn(email) {
-    const accounts = getAccounts();
-    if (!accounts[email]) {
-      accounts[email] = createAccount(email);
-      write(KEYS.accounts, accounts);
-    }
+  function startSession(email) {
     write(KEYS.session, { email });
     return currentUser();
+  }
+
+  // ---------- סיסמאות ----------
+  // שומרים רק hash: "טביעת אצבע" חד-כיוונית של הסיסמה, שאי אפשר לשחזר ממנה את הסיסמה.
+  // ה-salt הוא מחרוזת אקראית לכל משתמש, כך שלשתי סיסמאות זהות יש hash שונה.
+  // בחלק ג׳ זה יעבור לשרת, עם אלגוריתם איטי שמיועד לסיסמאות (bcrypt).
+
+  function toHex(bytes) {
+    return Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
+  }
+
+  function randomSalt() {
+    return toHex(crypto.getRandomValues(new Uint8Array(16)));
+  }
+
+  async function hashPassword(password, salt) {
+    const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(salt + password));
+    return toHex(new Uint8Array(digest));
   }
 
   function currentUser() {
@@ -253,45 +275,60 @@ const Api = (() => {
     /** המשתמש המחובר, או null. סינכרוני — כמו session ששמור בדפדפן. */
     currentUser,
 
-    requestOtp(rawEmail) {
-      return respond(() => {
-        const check = Validation.email(rawEmail);
-        if (!check.valid) throw new ApiError('invalid', check.error);
-        const code = String(Math.floor(100000 + Math.random() * 900000));
-        write(KEYS.otp, { email: check.value, code, expiresAt: Date.now() + OTP_TTL_MS, attempts: 0 });
-        // בשרת אמיתי הקוד נשלח במייל. בדמו מחזירים אותו כדי להציג על המסך.
-        return { email: check.value, demoCode: code };
+    /** הרשמה: יוצר חשבון חדש ומחבר אליו. */
+    register({ name, email, password }) {
+      return respond(async () => {
+        // בודקים שוב, כי לא סומכים על הבדיקה בדפדפן
+        const checks = [Validation.displayName(name), Validation.email(email), Validation.password(password)];
+        const failed = checks.find((check) => !check.valid);
+        if (failed) throw new ApiError('invalid', failed.error);
+        const [nameCheck, emailCheck] = checks;
+
+        const accounts = getAccounts();
+        if (accounts[emailCheck.value]) {
+          throw new ApiError('email-taken', 'כבר יש חשבון עם האימייל הזה. אפשר להיכנס בלשונית "כניסה".');
+        }
+        const salt = randomSalt();
+        const passwordHash = await hashPassword(password, salt);
+        accounts[emailCheck.value] = createAccount({ name: nameCheck.value, salt, passwordHash });
+        write(KEYS.accounts, accounts);
+        return startSession(emailCheck.value);
       });
     },
 
-    verifyOtp(email, code) {
-      return respond(() => {
-        const otp = read(KEYS.otp, null);
-        if (!otp || otp.email !== email) {
-          throw new ApiError('otp-invalid', 'קוד לא תקין או פג תוקף. בקש קוד חדש.');
+    /**
+     * כניסה לחשבון קיים. אותה הודעה לאימייל שלא קיים ולסיסמה שגויה,
+     * כדי לא לגלות למי שמנחש אילו כתובות רשומות.
+     */
+    login({ email, password }) {
+      return respond(async () => {
+        const key = email.trim().toLowerCase();
+        const attempts = read(KEYS.loginAttempts, {});
+        const record = attempts[key] || { failed: 0, lockedUntil: 0 };
+
+        if (Date.now() < record.lockedUntil) {
+          const seconds = Math.ceil((record.lockedUntil - Date.now()) / 1000);
+          throw new ApiError('locked-out', `יותר מדי ניסיונות שגויים. אפשר לנסות שוב בעוד ${seconds} שניות.`);
         }
-        if (Date.now() > otp.expiresAt) {
-          localStorage.removeItem(KEYS.otp);
-          throw new ApiError('otp-expired', 'פג תוקף הקוד (5 דקות). בקש קוד חדש.');
-        }
-        if (otp.code !== code) {
-          otp.attempts += 1;
-          if (otp.attempts >= OTP_MAX_ATTEMPTS) {
-            localStorage.removeItem(KEYS.otp);
-            throw new ApiError('otp-locked', 'יותר מדי ניסיונות שגויים. בקש קוד חדש.');
+
+        const account = getAccounts()[key];
+        const correct = account && (await hashPassword(password, account.salt)) === account.passwordHash;
+        if (!correct) {
+          // אחרי 5 ניסיונות שגויים חוסמים לדקה, כדי שאי אפשר יהיה לנחש סיסמאות בלי סוף
+          record.failed += 1;
+          if (record.failed >= MAX_LOGIN_ATTEMPTS) {
+            record.failed = 0;
+            record.lockedUntil = Date.now() + LOCKOUT_MS;
           }
-          write(KEYS.otp, otp);
-          const left = OTP_MAX_ATTEMPTS - otp.attempts;
-          throw new ApiError('otp-invalid', `קוד לא תקין. נשארו ${left} ניסיונות.`);
+          attempts[key] = record;
+          write(KEYS.loginAttempts, attempts);
+          throw new ApiError('bad-credentials', 'האימייל או הסיסמה שגויים');
         }
-        localStorage.removeItem(KEYS.otp);
-        return signIn(email);
-      });
-    },
 
-    /** כניסה עם Google — בדמו נכנסים לחשבון Google קבוע. */
-    signInWithGoogle() {
-      return respond(() => signIn('demo.google@gmail.com'));
+        delete attempts[key];
+        write(KEYS.loginAttempts, attempts);
+        return startSession(key);
+      });
     },
 
     updateName(rawName) {

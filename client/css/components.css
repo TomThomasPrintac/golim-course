@@ -86,22 +86,6 @@
   background: var(--red-soft);
 }
 
-.btn--google {
-  background: var(--card);
-  color: var(--ink);
-  border-color: var(--border);
-}
-
-.btn--google:hover:not(:disabled) {
-  background: var(--sunken);
-}
-
-.google-g {
-  font-family: Arial, sans-serif;
-  font-weight: 700;
-  color: #4285F4;
-}
-
 .btn--whatsapp {
   background: #25D366;
   color: #0B3D1F;
@@ -177,6 +161,7 @@ label {
 
 input[type="text"],
 input[type="email"],
+input[type="password"],
 input[type="search"] {
   width: 100%;
   min-height: 48px;

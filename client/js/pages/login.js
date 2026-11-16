@@ -1,181 +1,161 @@
 /*
- * login.js — עמוד הכניסה.
- * זרימה: אימייל ← קוד בן 6 ספרות ← (רק בפעם הראשונה) בחירת שם ← עמוד המשחקים.
+ * login.js — עמוד הכניסה: כניסה לחשבון קיים או הרשמה לחשבון חדש.
+ * שני טפסים בעמוד אחד, והלשוניות למעלה מחליפות ביניהם.
+ * אחרי כניסה או הרשמה מוצלחת עוברים לעמוד המשחקים.
  */
 
-const RESEND_COOLDOWN_SEC = 30;
-
-const steps = {
-  email: document.getElementById('step-email'),
-  code: document.getElementById('step-code'),
-  name: document.getElementById('step-name'),
+const tabs = document.querySelectorAll('[data-mode]');
+const forms = {
+  login: document.getElementById('login-form'),
+  register: document.getElementById('register-form'),
 };
-const emailForm = document.getElementById('email-form');
-const emailInput = document.getElementById('email');
-const suggestionBtn = document.getElementById('email-suggestion');
-const codeForm = document.getElementById('code-form');
-const codeInput = document.getElementById('code');
-const resendBtn = document.getElementById('resend-btn');
-const nameForm = document.getElementById('name-form');
-const nameInput = document.getElementById('display-name');
-const nameCount = document.getElementById('display-name-count');
 
-let pendingEmail = null; // האימייל שאליו נשלח הקוד האחרון
-let resendTimer = null;
+const loginEls = {
+  email: document.getElementById('login-email'),
+  password: document.getElementById('login-password'),
+  error: document.getElementById('login-error'),
+};
 
-/** מציג שלב אחד ומסתיר את השאר. */
-function showStep(stepName) {
-  for (const [key, section] of Object.entries(steps)) {
-    section.hidden = key !== stepName;
-  }
-  steps[stepName].querySelector('input').focus();
-}
+const registerEls = {
+  name: document.getElementById('reg-name'),
+  nameCount: document.getElementById('reg-name-count'),
+  email: document.getElementById('reg-email'),
+  suggestion: document.getElementById('reg-email-suggestion'),
+  password: document.getElementById('reg-password'),
+  rules: document.getElementById('reg-password-rules'),
+  confirm: document.getElementById('reg-confirm'),
+  error: document.getElementById('register-error'),
+};
 
 function goToApp() {
   location.replace('matches.html');
 }
 
-/** אחרי כניסה מוצלחת: משתמש בלי שם עובר לבחירת שם, השאר — לאפליקציה. */
-function afterSignIn(user) {
-  if (user.name) goToApp();
-  else showStep('name');
+// ---------- מעבר בין כניסה להרשמה ----------
+
+function showMode(mode) {
+  for (const tab of tabs) {
+    tab.setAttribute('aria-pressed', String(tab.dataset.mode === mode));
+  }
+  for (const [key, form] of Object.entries(forms)) {
+    form.hidden = key !== mode;
+  }
+  forms[mode].querySelector('input').focus();
 }
 
-// ---------- שלב 1: אימייל ----------
+/** כפתור "הצג" ליד שדה סיסמה: מחליף בין טקסט גלוי לנקודות. */
+function togglePassword(event) {
+  const button = event.currentTarget;
+  const input = document.getElementById(button.getAttribute('aria-controls'));
+  const show = input.type === 'password';
+  input.type = show ? 'text' : 'password';
+  button.setAttribute('aria-pressed', String(show));
+  button.textContent = show ? 'הסתר' : 'הצג';
+}
 
-async function handleEmailSubmit(event) {
+// ---------- כניסה ----------
+
+async function handleLogin(event) {
   event.preventDefault();
-  UI.clearFieldError(emailInput);
-  suggestionBtn.hidden = true;
+  loginEls.error.textContent = '';
+  UI.clearFieldError(loginEls.email);
+  UI.clearFieldError(loginEls.password);
 
-  const check = Validation.email(emailInput.value);
-  if (!check.valid) {
-    UI.setFieldError(emailInput, check.error);
-    if (check.suggestion) {
-      suggestionBtn.textContent = `כן, תקן ל-${ltr(check.suggestion)}`;
-      suggestionBtn.dataset.value = check.suggestion;
-      suggestionBtn.hidden = false;
-    }
-    emailInput.focus();
+  // בכניסה בודקים רק שהשדות מלאים ותקינים. את חוקי הסיסמה בודקים בהרשמה.
+  const email = Validation.email(loginEls.email.value);
+  const hasPassword = loginEls.password.value !== '';
+  if (!email.valid) UI.setFieldError(loginEls.email, email.error);
+  if (!hasPassword) UI.setFieldError(loginEls.password, 'נא להזין סיסמה');
+  if (!email.valid || !hasPassword) {
+    (email.valid ? loginEls.password : loginEls.email).focus();
     return;
   }
-  await sendCode(check.value, emailForm.querySelector('[type="submit"]'));
-}
 
-/** תיקון טעות הקלדה בלחיצה אחת. */
-function applySuggestion() {
-  emailInput.value = suggestionBtn.dataset.value;
-  suggestionBtn.hidden = true;
-  UI.clearFieldError(emailInput);
-  emailInput.focus();
-}
-
-async function sendCode(email, button) {
-  UI.setBusy(button, true, 'שולח…');
-  let sent = false;
-  try {
-    const { demoCode } = await Api.requestOtp(email);
-    pendingEmail = email;
-    document.getElementById('code-email').textContent = email;
-    document.getElementById('demo-code').textContent = demoCode;
-    codeInput.value = '';
-    UI.clearFieldError(codeInput);
-    showStep('code');
-    sent = true;
-  } catch (error) {
-    const target = steps.code.hidden ? emailInput : codeInput;
-    UI.setFieldError(target, UI.errorMessage(error));
-  } finally {
-    UI.setBusy(button, false);
-  }
-  // אחרי setBusy, כדי שהשחרור של הכפתור לא ידרוס את הספירה לאחור
-  if (sent) startResendCooldown();
-}
-
-async function handleGoogle(event) {
-  const button = event.currentTarget;
+  const button = forms.login.querySelector('[type="submit"]');
   UI.setBusy(button, true, 'מתחבר…');
   try {
-    afterSignIn(await Api.signInWithGoogle());
-  } catch (error) {
-    UI.toast(UI.errorMessage(error), 'error');
-  } finally {
-    UI.setBusy(button, false);
-  }
-}
-
-// ---------- שלב 2: קוד ----------
-
-async function handleCodeSubmit(event) {
-  event.preventDefault();
-  UI.clearFieldError(codeInput);
-
-  const check = Validation.otp(codeInput.value);
-  if (!check.valid) {
-    UI.setFieldError(codeInput, check.error);
-    codeInput.focus();
-    return;
-  }
-
-  const button = codeForm.querySelector('[type="submit"]');
-  UI.setBusy(button, true, 'בודק…');
-  try {
-    afterSignIn(await Api.verifyOtp(pendingEmail, check.value));
-  } catch (error) {
-    UI.setFieldError(codeInput, UI.errorMessage(error));
-    codeInput.select();
-  } finally {
-    UI.setBusy(button, false);
-  }
-}
-
-/** אחרי שליחת קוד אפשר לבקש קוד חדש רק אחרי 30 שניות. */
-function startResendCooldown() {
-  clearInterval(resendTimer);
-  let secondsLeft = RESEND_COOLDOWN_SEC;
-  resendBtn.disabled = true;
-
-  const update = () => {
-    resendBtn.textContent = `שלח קוד חדש (0:${String(secondsLeft).padStart(2, '0')})`;
-    if (secondsLeft === 0) {
-      clearInterval(resendTimer);
-      resendBtn.disabled = false;
-      resendBtn.textContent = 'שלח קוד חדש';
-    }
-    secondsLeft -= 1;
-  };
-  update();
-  resendTimer = setInterval(update, 1000);
-}
-
-function changeEmail() {
-  clearInterval(resendTimer);
-  showStep('email');
-}
-
-// ---------- שלב 3: שם ----------
-
-function updateNameCount() {
-  nameCount.textContent = `${nameInput.value.trim().length}/${NAME_MAX} תווים`;
-  UI.clearFieldError(nameInput);
-}
-
-async function handleNameSubmit(event) {
-  event.preventDefault();
-  const check = Validation.displayName(nameInput.value);
-  if (!check.valid) {
-    UI.setFieldError(nameInput, check.error);
-    nameInput.focus();
-    return;
-  }
-
-  const button = nameForm.querySelector('[type="submit"]');
-  UI.setBusy(button, true, 'שומר…');
-  try {
-    await Api.updateName(check.value);
+    await Api.login({ email: email.value, password: loginEls.password.value });
     goToApp();
   } catch (error) {
-    UI.setFieldError(nameInput, UI.errorMessage(error));
+    loginEls.error.textContent = UI.errorMessage(error);
+    loginEls.password.select();
+  } finally {
+    UI.setBusy(button, false);
+  }
+}
+
+// ---------- הרשמה ----------
+
+function updateNameCount() {
+  registerEls.nameCount.textContent =
+    `${registerEls.name.value.trim().length}/${NAME_MAX} תווים · כך החברים יזהו אותך בטבלה`;
+  UI.clearFieldError(registerEls.name);
+}
+
+/** רשימת דרישות הסיסמה מתעדכנת בזמן ההקלדה: דרישה שמתקיימת מקבלת ✓. */
+function updatePasswordRules() {
+  const rules = Validation.passwordRules(registerEls.password.value);
+  for (const item of registerEls.rules.children) {
+    item.classList.toggle('is-met', rules[item.dataset.rule]);
+  }
+  UI.clearFieldError(registerEls.password);
+}
+
+/** הצעה לתיקון טעות הקלדה בכתובת (למשל gmial.com), בלחיצה אחת. */
+function showSuggestion(suggestion) {
+  registerEls.suggestion.textContent = `כן, תקן ל-${ltr(suggestion)}`;
+  registerEls.suggestion.dataset.value = suggestion;
+  registerEls.suggestion.hidden = false;
+}
+
+function applySuggestion() {
+  registerEls.email.value = registerEls.suggestion.dataset.value;
+  registerEls.suggestion.hidden = true;
+  UI.clearFieldError(registerEls.email);
+  registerEls.email.focus();
+}
+
+async function handleRegister(event) {
+  event.preventDefault();
+  registerEls.error.textContent = '';
+  registerEls.suggestion.hidden = true;
+
+  // 1. בודקים את כל השדות, ומציגים שגיאה ליד כל שדה שנכשל
+  const fields = [
+    [registerEls.name, Validation.displayName(registerEls.name.value)],
+    [registerEls.email, Validation.email(registerEls.email.value)],
+    [registerEls.password, Validation.password(registerEls.password.value)],
+    [registerEls.confirm, Validation.passwordConfirm(registerEls.password.value, registerEls.confirm.value)],
+  ];
+  for (const [input, check] of fields) {
+    if (check.valid) UI.clearFieldError(input);
+    else UI.setFieldError(input, check.error);
+  }
+  const emailCheck = fields[1][1];
+  if (emailCheck.suggestion) showSuggestion(emailCheck.suggestion);
+
+  const firstInvalid = fields.find(([, check]) => !check.valid);
+  if (firstInvalid) {
+    firstInvalid[0].focus();
+    return;
+  }
+
+  // 2. שליחה ל"שרת"
+  const [name, email, password] = fields.map(([, check]) => check.value);
+  const button = forms.register.querySelector('[type="submit"]');
+  UI.setBusy(button, true, 'יוצר חשבון…');
+  try {
+    await Api.register({ name, email, password });
+    goToApp();
+  } catch (error) {
+    // אימייל שכבר רשום — השגיאה שייכת לשדה האימייל. שאר השגיאות מוצגות מעל הכפתור.
+    if (error.code === 'email-taken') {
+      UI.setFieldError(registerEls.email, UI.errorMessage(error));
+      registerEls.email.focus();
+    } else {
+      registerEls.error.textContent = UI.errorMessage(error);
+    }
+  } finally {
     UI.setBusy(button, false);
   }
 }
@@ -188,20 +168,26 @@ function init() {
     goToApp(); // כבר מחובר
     return;
   }
-  showStep(user ? 'name' : 'email');
 
-  emailForm.addEventListener('submit', handleEmailSubmit);
-  emailInput.addEventListener('input', () => UI.clearFieldError(emailInput));
-  suggestionBtn.addEventListener('click', applySuggestion);
-  document.getElementById('google-btn').addEventListener('click', handleGoogle);
+  for (const tab of tabs) {
+    tab.addEventListener('click', () => showMode(tab.dataset.mode));
+  }
+  for (const button of document.querySelectorAll('.password-toggle')) {
+    button.addEventListener('click', togglePassword);
+  }
 
-  codeForm.addEventListener('submit', handleCodeSubmit);
-  codeInput.addEventListener('input', () => UI.clearFieldError(codeInput));
-  resendBtn.addEventListener('click', () => sendCode(pendingEmail, resendBtn));
-  document.getElementById('change-email-btn').addEventListener('click', changeEmail);
+  forms.login.addEventListener('submit', handleLogin);
+  loginEls.email.addEventListener('input', () => UI.clearFieldError(loginEls.email));
+  loginEls.password.addEventListener('input', () => UI.clearFieldError(loginEls.password));
 
-  nameForm.addEventListener('submit', handleNameSubmit);
-  nameInput.addEventListener('input', updateNameCount);
+  forms.register.addEventListener('submit', handleRegister);
+  registerEls.name.addEventListener('input', updateNameCount);
+  registerEls.email.addEventListener('input', () => UI.clearFieldError(registerEls.email));
+  registerEls.suggestion.addEventListener('click', applySuggestion);
+  registerEls.password.addEventListener('input', updatePasswordRules);
+  registerEls.confirm.addEventListener('input', () => UI.clearFieldError(registerEls.confirm));
+
+  loginEls.email.focus();
 }
 
 init();
