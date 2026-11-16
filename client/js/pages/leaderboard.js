@@ -65,7 +65,10 @@ function renderPodium() {
     UI.el('span', { className: 'podium-points' }, `${row.points} נק׳`),
     UI.el('span', { className: 'podium-step' }, row.rank));
 
-  els.podium.hidden = state.query !== '' || top.length === 0;
+  els.podium.hidden = top.length === 0;
+  // בזמן חיפוש: בטלפון הפודיום מוסתר, כדי שהתוצאות יופיעו מיד מתחת לשדה.
+  // במחשב הוא בעמודה נפרדת ולא מפריע, ולכן נשאר (pages.css).
+  els.podium.classList.toggle('is-searching', state.query !== '');
   els.podium.replaceChildren(...[place(top[1], 'silver'), place(top[0], 'gold'), place(top[2], 'bronze')].filter(Boolean));
 }
 

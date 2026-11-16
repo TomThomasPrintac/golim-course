@@ -41,7 +41,7 @@
     </div>
   </header>
 
-  <main id="main" class="page page--narrow">
+  <main id="main" class="page page--split">
     <div class="predict-top">
       <a href="matches.html" class="icon-btn" aria-label="סגור וחזור למשחקים">✕</a>
       <h1 class="page-title">הניחוש שלך</h1>
@@ -51,78 +51,83 @@
     <p id="load-message" class="loading-row" role="status">טוען את המשחק…</p>
 
     <div id="predict-content" hidden>
-      <!-- פרטי המשחק: דגלים, שמות, שלב ושעה -->
-      <section id="match-hero" class="card match-hero" aria-label="פרטי המשחק"></section>
+      <!-- במחשב: המשחק והטופס בעמודה אחת, ומידע משלים בעמודה השנייה -->
+      <div class="predict-main">
+        <!-- פרטי המשחק: דגלים, שמות, שלב ושעה -->
+        <section id="match-hero" class="card match-hero" aria-label="פרטי המשחק"></section>
 
-      <div id="unsaved-banner" class="banner banner--warn" role="status" hidden>
-        <span aria-hidden="true">⚠️</span> הניחוש עדיין לא נשמר!
-      </div>
-      <div id="locked-banner" class="banner banner--locked" tabindex="-1" hidden></div>
+        <div id="unsaved-banner" class="banner banner--warn" role="status" hidden>
+          <span aria-hidden="true">⚠️</span> הניחוש עדיין לא נשמר!
+        </div>
+        <div id="locked-banner" class="banner banner--locked" tabindex="-1" hidden></div>
 
-      <!-- הטופס של השירות המרכזי: ניחוש תוצאה -->
-      <form id="prediction-form" class="card predict-form" novalidate>
-        <fieldset class="score-fieldset">
-          <legend class="visually-hidden">התוצאה שאתה מנחש</legend>
-          <div class="score-pickers">
-            <div class="picker">
-              <label for="home-goals" class="picker-team" id="home-label"></label>
-              <div class="stepper">
-                <button type="button" class="step-btn" data-side="home" data-step="1">+</button>
-                <input id="home-goals" name="home" type="text" inputmode="numeric" autocomplete="off"
-                       maxlength="2" dir="ltr" class="goals-input" aria-describedby="home-goals-error">
-                <button type="button" class="step-btn" data-side="home" data-step="-1">−</button>
+        <!-- הטופס של השירות המרכזי: ניחוש תוצאה -->
+        <form id="prediction-form" class="card predict-form" novalidate>
+          <fieldset class="score-fieldset">
+            <legend class="visually-hidden">התוצאה שאתה מנחש</legend>
+            <div class="score-pickers">
+              <div class="picker">
+                <label for="home-goals" class="picker-team" id="home-label"></label>
+                <div class="stepper">
+                  <button type="button" class="step-btn" data-side="home" data-step="1">+</button>
+                  <input id="home-goals" name="home" type="text" inputmode="numeric" autocomplete="off"
+                         maxlength="2" dir="ltr" class="goals-input" aria-describedby="home-goals-error">
+                  <button type="button" class="step-btn" data-side="home" data-step="-1">−</button>
+                </div>
+                <p class="field-error" id="home-goals-error" aria-live="polite"></p>
               </div>
-              <p class="field-error" id="home-goals-error" aria-live="polite"></p>
-            </div>
 
-            <span class="score-sep" aria-hidden="true">:</span>
+              <span class="score-sep" aria-hidden="true">:</span>
 
-            <div class="picker">
-              <label for="away-goals" class="picker-team" id="away-label"></label>
-              <div class="stepper">
-                <button type="button" class="step-btn" data-side="away" data-step="1">+</button>
-                <input id="away-goals" name="away" type="text" inputmode="numeric" autocomplete="off"
-                       maxlength="2" dir="ltr" class="goals-input" aria-describedby="away-goals-error">
-                <button type="button" class="step-btn" data-side="away" data-step="-1">−</button>
+              <div class="picker">
+                <label for="away-goals" class="picker-team" id="away-label"></label>
+                <div class="stepper">
+                  <button type="button" class="step-btn" data-side="away" data-step="1">+</button>
+                  <input id="away-goals" name="away" type="text" inputmode="numeric" autocomplete="off"
+                         maxlength="2" dir="ltr" class="goals-input" aria-describedby="away-goals-error">
+                  <button type="button" class="step-btn" data-side="away" data-step="-1">−</button>
+                </div>
+                <p class="field-error" id="away-goals-error" aria-live="polite"></p>
               </div>
-              <p class="field-error" id="away-goals-error" aria-live="polite"></p>
             </div>
+          </fieldset>
+
+          <div id="double-row" class="double-row">
+            <label class="switch">
+              <input type="checkbox" id="double" name="double" role="switch" aria-describedby="double-hint">
+              <span class="switch-track" aria-hidden="true"></span>
+              <span class="switch-label"><bdi dir="ltr">★ ×2</bdi> על המשחק הזה</span>
+            </label>
+            <p id="double-hint" class="hint">מכפיל את הניקוד. פעם אחת בכל מחזור.</p>
           </div>
-        </fieldset>
 
-        <div id="double-row" class="double-row">
-          <label class="switch">
-            <input type="checkbox" id="double" name="double" role="switch" aria-describedby="double-hint">
-            <span class="switch-track" aria-hidden="true"></span>
-            <span class="switch-label"><bdi dir="ltr">★ ×2</bdi> על המשחק הזה</span>
-          </label>
-          <p id="double-hint" class="hint">מכפיל את הניקוד. פעם אחת בכל מחזור.</p>
-        </div>
+          <p id="form-error" class="form-error" role="alert"></p>
 
-        <p id="form-error" class="form-error" role="alert"></p>
+          <div id="save-row" class="save-row">
+            <button type="submit" id="save-btn" class="btn btn--primary btn--block btn--lg">שמור ניחוש</button>
+          </div>
 
-        <div id="save-row" class="save-row">
-          <button type="submit" id="save-btn" class="btn btn--primary btn--block btn--lg">שמור ניחוש</button>
-        </div>
+          <div id="save-success" class="success-msg" role="status" hidden>
+            <p class="success-title">✅ הניחוש נשמר</p>
+            <p id="success-next" class="success-next"></p>
+            <button type="button" id="stay-btn" class="link-btn">הישאר כאן</button>
+          </div>
+        </form>
+      </div>
 
-        <div id="save-success" class="success-msg" role="status" hidden>
-          <p class="success-title">✅ הניחוש נשמר</p>
-          <p id="success-next" class="success-next"></p>
-          <button type="button" id="stay-btn" class="link-btn">הישאר כאן</button>
-        </div>
-      </form>
+      <div class="predict-side">
+        <section class="card" aria-labelledby="dist-title">
+          <h2 id="dist-title" class="card-title">מה הליגה מנחשת</h2>
+          <div id="distribution"></div>
+        </section>
 
-      <section class="card" aria-labelledby="dist-title">
-        <h2 id="dist-title" class="card-title">מה הליגה מנחשת</h2>
-        <div id="distribution"></div>
-      </section>
+        <section class="card" aria-labelledby="rules-title">
+          <h2 id="rules-title" class="card-title">כך מנקדים</h2>
+          <div id="rules"></div>
+        </section>
 
-      <section class="card" aria-labelledby="rules-title">
-        <h2 id="rules-title" class="card-title">כך מנקדים</h2>
-        <div id="rules"></div>
-      </section>
-
-      <a id="next-link" class="next-link" href="#" hidden></a>
+        <a id="next-link" class="next-link" href="#" hidden></a>
+      </div>
     </div>
 
     <section id="not-found" class="card empty-state" hidden>

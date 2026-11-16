@@ -41,7 +41,7 @@
     </div>
   </header>
 
-  <main id="main" class="page page--narrow">
+  <main id="main" class="page page--split">
     <h1 class="page-title">טבלה</h1>
 
     <div id="league-chips" class="chips chips--scroll" role="group" aria-label="בחירת ליגה"></div>
@@ -51,32 +51,37 @@
       <button type="button" data-period="round" aria-pressed="false">המחזור <span id="round-label" class="segmented-sub"></span></button>
     </div>
 
-    <section id="podium" class="podium" aria-label="שלושת הראשונים"></section>
+    <!-- במחשב: הפודיום בעמודה צדדית, והטבלה בעמודה רחבה -->
+    <div class="board-layout">
+      <section id="podium" class="podium" aria-label="שלושת הראשונים"></section>
 
-    <section class="card table-card" aria-labelledby="table-title">
-      <div class="table-head">
-        <h2 id="table-title" class="card-title">דירוג</h2>
-        <label for="player-search" class="visually-hidden">חיפוש שחקן לפי שם</label>
-        <input id="player-search" type="search" class="search-input" placeholder="🔎 חיפוש לפי שם" autocomplete="off">
+      <div class="board-main">
+        <section class="card table-card" aria-labelledby="table-title">
+          <div class="table-head">
+            <h2 id="table-title" class="card-title">דירוג</h2>
+            <label for="player-search" class="visually-hidden">חיפוש שחקן לפי שם</label>
+            <input id="player-search" type="search" class="search-input" placeholder="🔎 חיפוש לפי שם" autocomplete="off">
+          </div>
+          <table class="rank-table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">שם</th>
+                <th scope="col"><abbr title="ניחושים מדויקים">מדויקים</abbr></th>
+                <th scope="col">נק׳</th>
+              </tr>
+            </thead>
+            <tbody id="rank-body">
+              <tr><td colspan="4" class="loading-row">טוען את הטבלה…</td></tr>
+            </tbody>
+          </table>
+          <p class="hint table-note">בשוויון נקודות מכריעים: ניחושים מדויקים ← פגיעות הפרש ← פגיעות כיוון. שוויון מלא = אותו מקום.</p>
+        </section>
+
+        <!-- שורת "אתה": תמיד גלויה בתחתית המסך -->
+        <aside id="me-bar" class="me-bar" aria-label="המקום שלך" hidden></aside>
       </div>
-      <table class="rank-table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">שם</th>
-            <th scope="col"><abbr title="ניחושים מדויקים">מדויקים</abbr></th>
-            <th scope="col">נק׳</th>
-          </tr>
-        </thead>
-        <tbody id="rank-body">
-          <tr><td colspan="4" class="loading-row">טוען את הטבלה…</td></tr>
-        </tbody>
-      </table>
-      <p class="hint table-note">בשוויון נקודות מכריעים: ניחושים מדויקים ← פגיעות הפרש ← פגיעות כיוון. שוויון מלא = אותו מקום.</p>
-    </section>
-
-    <!-- שורת "אתה": תמיד גלויה בתחתית המסך -->
-    <aside id="me-bar" class="me-bar" aria-label="המקום שלך" hidden></aside>
+    </div>
   </main>
 
   <footer class="site-footer">
