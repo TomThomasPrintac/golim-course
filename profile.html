@@ -41,7 +41,7 @@
     </div>
   </header>
 
-  <main id="main" class="page page--narrow">
+  <main id="main" class="page page--split">
     <h1 class="visually-hidden">הפרופיל שלי</h1>
 
     <section class="card profile-head" aria-label="פרטים אישיים">
@@ -74,42 +74,47 @@
       </dl>
     </section>
 
-    <section class="card" aria-labelledby="history-title">
-      <h2 id="history-title" class="card-title">היסטוריית ניחושים</h2>
-      <ul id="history" class="history-list">
-        <li class="loading-row">טוען…</li>
-      </ul>
-    </section>
+    <!-- במחשב: ההיסטוריה בעמודה אחת, והחוקים וכלי הבדיקה בשנייה -->
+    <div class="profile-layout">
+      <section class="card" aria-labelledby="history-title">
+        <h2 id="history-title" class="card-title">היסטוריית ניחושים</h2>
+        <ul id="history" class="history-list">
+          <li class="loading-row">טוען…</li>
+        </ul>
+      </section>
 
-    <section class="card" aria-labelledby="rules-title">
-      <h2 id="rules-title" class="card-title">חוקי הניקוד</h2>
-      <div class="table-scroll">
-        <table class="rules-table">
-          <thead>
-            <tr>
-              <th scope="col">שלב</th>
-              <th scope="col">מדויק</th>
-              <th scope="col">הפרש</th>
-              <th scope="col">כיוון</th>
-              <th scope="col"><bdi dir="ltr">★×2</bdi></th>
-            </tr>
-          </thead>
-          <tbody id="rules-body"></tbody>
-        </table>
+      <div class="profile-side">
+        <section class="card" aria-labelledby="rules-title">
+          <h2 id="rules-title" class="card-title">חוקי הניקוד</h2>
+          <div class="table-scroll">
+            <table class="rules-table">
+              <thead>
+                <tr>
+                  <th scope="col">שלב</th>
+                  <th scope="col">מדויק</th>
+                  <th scope="col">הפרש</th>
+                  <th scope="col">כיוון</th>
+                  <th scope="col"><bdi dir="ltr">★×2</bdi></th>
+                </tr>
+              </thead>
+              <tbody id="rules-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="card demo-tools" aria-labelledby="demo-title">
+          <h2 id="demo-title" class="card-title">🧪 כלי בדיקה</h2>
+          <p class="muted">לבדיקת מקרי קצה בגרסת הדמו.</p>
+          <div class="form-actions">
+            <button type="button" id="kickoff-soon-btn" class="btn btn--secondary btn--sm">משחק שנסגר בעוד דקה</button>
+            <button type="button" id="reset-btn" class="btn btn--ghost btn--sm">איפוס כל נתוני הדמו</button>
+          </div>
+          <p id="demo-result" class="demo-result" aria-live="polite"></p>
+        </section>
+
+        <button type="button" id="logout-btn" class="btn btn--danger btn--block">התנתקות</button>
       </div>
-    </section>
-
-    <section class="card demo-tools" aria-labelledby="demo-title">
-      <h2 id="demo-title" class="card-title">🧪 כלי בדיקה</h2>
-      <p class="muted">לבדיקת מקרי קצה בגרסת הדמו.</p>
-      <div class="form-actions">
-        <button type="button" id="kickoff-soon-btn" class="btn btn--secondary btn--sm">משחק שנסגר בעוד דקה</button>
-        <button type="button" id="reset-btn" class="btn btn--ghost btn--sm">איפוס כל נתוני הדמו</button>
-      </div>
-      <p id="demo-result" class="demo-result" aria-live="polite"></p>
-    </section>
-
-    <button type="button" id="logout-btn" class="btn btn--danger btn--block">התנתקות</button>
+    </div>
   </main>
 
   <footer class="site-footer">

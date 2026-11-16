@@ -125,8 +125,16 @@ body:has(.site-nav) {
   gap: 16px;
 }
 
-.page--narrow {
+/* עמודים שבטלפון בנויים כעמודה אחת: עד 900px עמודה ממורכזת ברוחב נוח לקריאה,
+   ומ-900px ומעלה כל רוחב המסך, בפריסה של שתי עמודות (ראו pages.css). */
+.page--split {
   max-width: var(--content-width);
+}
+
+@media (min-width: 900px) {
+  .page--split {
+    max-width: var(--wide-width);
+  }
 }
 
 .page-title {

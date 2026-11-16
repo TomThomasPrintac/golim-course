@@ -94,6 +94,37 @@
   font-size: 0.85rem;
 }
 
+/* במחשב: הלוגו והכותרת בצד אחד, וכרטיס הכניסה בצד השני */
+@media (min-width: 900px) {
+  .login-page {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 440px);
+    align-content: center;
+    align-items: center;
+    column-gap: 64px;
+    row-gap: 16px;
+  }
+
+  .login-page > * {
+    grid-column: 2;
+  }
+
+  .login-page > .login-hero {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+
+  .login-logo {
+    width: 140px;
+    height: 140px;
+    border-radius: 36px;
+  }
+
+  .login-title {
+    font-size: 3.4rem;
+  }
+}
+
 /* ================= משחקים ================= */
 
 .next-match {
@@ -256,6 +287,23 @@
 #predict-content {
   display: grid;
   gap: 16px;
+}
+
+.predict-main,
+.predict-side {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+  min-width: 0;
+}
+
+/* במחשב: שתי עמודות. לטופס, השירות המרכזי, יש יותר רוחב */
+@media (min-width: 900px) {
+  #predict-content {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    align-items: start;
+    gap: 24px;
+  }
 }
 
 .match-hero {
@@ -611,6 +659,17 @@
   }
 }
 
+@media (min-width: 900px) {
+  .league-list {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .league-list > .empty-state,
+  .league-list > .loading-row {
+    grid-column: 1 / -1;
+  }
+}
+
 /* ================= טבלה ================= */
 
 .podium {
@@ -806,6 +865,49 @@
   }
 }
 
+.board-layout,
+.board-main {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+
+/* במחשב: הפודיום בעמודה צדדית שנשארת גלויה בזמן גלילת הטבלה.
+   המיקום של כל עמודה קבוע, כדי שהטבלה לא תזוז כשהפודיום מוסתר בזמן חיפוש. */
+@media (min-width: 900px) {
+  .board-layout {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    align-items: start;
+    gap: 24px;
+  }
+
+  .podium {
+    grid-column: 1;
+    grid-row: 1;
+    position: sticky;
+    top: 80px; /* מתחת לכותרת העליונה */
+    padding: 24px 16px 16px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+
+  .board-main {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .podium:empty {
+    visibility: hidden; /* בזמן טעינה */
+  }
+}
+
+@media (max-width: 899px) {
+  .podium.is-searching {
+    display: none;
+  }
+}
+
 /* ================= פרופיל ================= */
 
 .profile-identity {
@@ -932,4 +1034,21 @@
 
 .demo-result:empty {
   display: none;
+}
+
+.profile-layout,
+.profile-side {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+  min-width: 0;
+}
+
+/* במחשב: ההיסטוריה בעמודה אחת, והחוקים וכלי הבדיקה בשנייה */
+@media (min-width: 900px) {
+  .profile-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+    gap: 24px;
+  }
 }
