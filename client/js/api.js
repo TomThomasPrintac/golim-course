@@ -351,15 +351,6 @@ const Api = (() => {
       });
     },
 
-    getMatch(id) {
-      return respond(() => {
-        requireAccount();
-        const match = allMatches().find((item) => item.id === id);
-        if (!match) throw new ApiError('not-found', 'המשחק לא נמצא');
-        return match;
-      });
-    },
-
     /**
      * שמירת ניחוש. השרת בודק שוב את כל הכללים, גם אם הלקוח כבר בדק.
      * @param {number} matchId
