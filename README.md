@@ -9,6 +9,8 @@
 
 | מה | איפה |
 |---|---|
+| אתר חי | [tomthomasprintac.github.io/golim-course/](https://tomthomasprintac.github.io/golim-course/) — אפשר לנסות בדפדפן בלי להוריד כלום |
+| הגרסה שהוגשה | [Release `part-b`](https://github.com/TomThomasPrintac/golim-course/releases/tag/part-b) — קובץ ZIP של צד הלקוח ודוח ה-PDF, כפי שהוגשו |
 | קובצי צד הלקוח | התיקייה [`client/`](client/) · להורדה כקובץ ZIP: [golim-course-main.zip](https://github.com/TomThomasPrintac/golim-course/archive/refs/heads/main.zip) |
 | דוח PDF | [`docs/part-b/golim-part-b-report.pdf`](docs/part-b/golim-part-b-report.pdf) — הוראות הפעלה, 3 בדיקות, הסבר רכיב JavaScript, שימוש ב-AI ושינויים לעומת חלק א׳ |
 | איך מנסים | הוראות קצרות בהמשך, והסבר מלא ב-[`client/README.md`](client/README.md) |

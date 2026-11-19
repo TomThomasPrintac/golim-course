@@ -5,6 +5,8 @@
 
 ## הפעלה
 
+**הכי מהיר — באינטרנט:** https://tomthomasprintac.github.io/golim-course/ (הגרסה של חלק ב׳, דרך GitHub Pages).
+
 **אפשרות 1 — שרת מקומי (מומלץ):** מתוך התיקייה `client`:
 
 ```bash
